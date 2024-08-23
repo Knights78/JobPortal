@@ -3,6 +3,7 @@ import cookieParser from "cookie-parser"
 import cors from "cors"
 import dotenv from "dotenv"
 import connectDB from "./utils/db.js"
+import userRouter from "./routes/user.route.js"
 dotenv.config({})
 connectDB();
 const app=express()
@@ -16,6 +17,8 @@ const corsOptions={
 
 app.use(cors(corsOptions))//cors is used for the frontend to coomunicate with the backend
 const PORT=process.env.PORT || 3000
+
+app.use('/api/v1/user',userRouter)
 app.listen(PORT,()=>{
     console.log(`server running at http://localhost:${PORT}`)
 })

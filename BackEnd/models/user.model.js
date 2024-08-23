@@ -25,7 +25,7 @@ const userSchema=new mongoose.Schema({
     },
     profile:{
         bio:{type:String},
-        skills:[{tupe:String}],
+        skills:[{type:String}],
         resume:{type:String},//we will store url of that particular link
         resumeOriginalName:{type:String},
         company:{type:mongoose.Schema.Types.ObjectId,ref:'Company'},//here for whichever company user is applying in this particular company id will be stored
