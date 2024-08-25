@@ -9,5 +9,6 @@ companyRouter.post('/companyRegister',isAuthenticated,companyRegister)
 companyRouter.get('/getCompany',isAuthenticated,getCompany)
 companyRouter.get('/getCompanyById/:id',isAuthenticated,getCompanyById)
 companyRouter.post('/updateCompany/:id',isAuthenticated,updateCompany)
+// companyRouter.delete('/deleteCompany/:id',isAuthenticated,deleteCompany)
 
 export default companyRouter

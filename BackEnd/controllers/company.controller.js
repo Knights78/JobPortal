@@ -52,6 +52,7 @@ export const getCompany = async (req, res) => {
     }
 }
 
+
 export const getCompanyById = async (req, res) => {//for a particular company if we want to find
     try {
         const companyId = req.params.id;
@@ -98,3 +99,26 @@ export const updateCompany=async(req,res)=>
         console.log(error)
     }
 }
+
+//if there are multiple companies registered by a single user then i can delete anyone of the company as well
+// export const deleteCompany=async(req,res)=>{
+//     try {
+//         const companyId=req.params.id
+//         const company=await Company.findByIdAndDelete(companyId)
+//         if(!company)
+//         {
+//             return res.json({
+//                 message:"error in removing the company",
+//                 success:false
+//             })
+//         }
+//         return res.json({
+//             message:"Company deleted succesfully",
+//             success:true
+//         })
+
+
+//     } catch (error) {
+//         console.log(error)
+//     }
+// }

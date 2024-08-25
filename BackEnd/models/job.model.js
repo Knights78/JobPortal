@@ -9,10 +9,9 @@ const jobSchema=new mongoose.Schema({
         type:String,
         required:true
     },
-    requirements:{//like what are the skills required for the particular job
-        type:String,
-    
-    },
+    requirements:[{
+        type: String
+    }],
     salary:{//what is the salary of that particular job
         type:Number,
         required:true
@@ -25,12 +24,17 @@ const jobSchema=new mongoose.Schema({
         type:String,
         required:true  
     },
+    experienceLevel:{
+        type:Number,
+        required:true
+    },
     position:{//what are the number of position for that particular job
         type:Number,
         required:true
     },
+   
     company:{
-        type:mongoose.Schema.Types.ObjectId,//company should be registered then from that particular comoany job will be there that is ref company is given
+        type:mongoose.Schema.Types.ObjectId,//company should be registered then from that particular comoany job will be there that is Why ref company is given
         ref:'Company',
         required:true
     },
@@ -39,7 +43,7 @@ const jobSchema=new mongoose.Schema({
         ref:'User',
         required:true
     },
-    application:[
+    application:[//this will store the id of the all the applications which have applied for this job which have been posted
         {
             type:mongoose.Schema.Types.ObjectId,
             ref:'Application'
