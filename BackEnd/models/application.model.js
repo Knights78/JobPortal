@@ -12,8 +12,9 @@ const applicationSchema=new mongoose.Schema({
     },
     status:{
         type:String,
-        enum:['pending,accepted,rejected'],
+        enum: ['pending', 'accepted', 'rejected'],
         default:'pending'
     }
 },{timestamps:true})
 export const Application=mongoose.model('Application',applicationSchema)
+//for a particular job and particular user has applied and in JOb model in an array all the applications will be stored based on the application
