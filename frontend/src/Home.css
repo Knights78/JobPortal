@@ -1,0 +1,125 @@
+.App {
+  text-align: center;
+}
+
+.App-header {
+  background-color: #f0f0f0;
+  padding: 20px;
+}
+
+nav {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+nav a {
+  text-decoration: none;
+  color: #333;
+  padding: 10px;
+
+}
+.title {
+  background-color: lightblue;
+  border-radius: 12px;
+  box-shadow: 2px 2px lightgrey;
+}
+.reg {
+  background-color: lightblue;
+  border-radius: 12px;
+  box-shadow: 2px 2px lightgrey;
+}
+nav button {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.hero h1 {
+  font-size: 3em;
+  margin-bottom: 10px;
+}
+
+.hero p {
+  font-size: 1.2em;
+  margin-bottom: 20px;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.search-bar input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-right: 10px;
+}
+
+.search-bar button {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.hero-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.hero-image img {
+  width: 50%;
+  max-width: 500px;
+}
+
+.stats {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.stat .icon {
+  width: 50px;
+  height: 50px;
+  margin-bottom: 10px;
+}
+
+.stat .icon img {
+  width: 100%;
+  height: 100%;
+}
+
+.stat h2 {
+  font-size: 2em;
+  margin-bottom: 5px;
+}
+
+.stat p {
+  font-size: 1em;
+}

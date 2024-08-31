@@ -4,15 +4,39 @@ import { useState } from 'react'
 import { Input } from '../ui/input'
 import { RadioGroup } from '@radix-ui/react-radio-group'
 import Navbar from '../shared/Navbar'
-
+import { Link } from 'react-router-dom'
+import axios from 'axios'
+import { Toaster } from 'sonner'
+import { toast } from 'sonner'
+import { USER_API_END_POINT } from '@/utils/constant'
+import { useNavigate } from 'react-router-dom'
 const Login = () => {
+    const navigate=useNavigate()
     const[input,setInput]=useState({
         email:"",
         password:"",
         role:""
     })
+    const[loading,setLoading]=useState(false)
     const handleonChange = (e) => {
         setInput({ ...input, [e.target.name]: e.target.value });
+    }
+    const handleSubmit=async(e)=>{
+     e.preventDefault();
+     console.log(input)
+     try {
+        const res=await axios.post(`${USER_API_END_POINT}/login`,input,{
+            headers:{'Content-Type':'application/json'},
+            withCredentials:true
+        })
+        if(res.data.success)
+        {
+            navigate('/')
+            toast.success(res.data.message);
+        }
+     } catch (error) {
+        console.log(error)
+     }
     }
   return (
     <div>
@@ -38,7 +62,7 @@ const Login = () => {
                             value={input.password}
                             name="password"
                             onChange={handleonChange}
-                            placeholder="patel@gmail.com"
+                            placeholder="********"
                         />
                     </div>
                     <div className='flex items-center justify-between'>
@@ -67,9 +91,9 @@ const Login = () => {
                             </div>
                         </RadioGroup>
                     </div>
-                    {/* {
-                        loading ? <Button className="w-full my-4"> <Loader2 className='mr-2 h-4 w-4 animate-spin' /> Please wait </Button> : <Button type="submit" className="w-full my-4">Login</Button>
-                    } */}
+                    {
+                        loading ? <button className="w-full my-4"> <Loader2 className='mr-2 h-4 w-4 animate-spin' /> Please wait </button> : <button type="submit" className="w-full my-4">Login</button>
+                    }
                     <span className='text-sm'>Don't have an account? <Link to="/signup" className='text-blue-600'>Signup</Link></span>
                 </form>
             </div>
