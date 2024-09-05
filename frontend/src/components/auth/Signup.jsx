@@ -48,7 +48,7 @@ const Signup = () => {
         try {
             //dispatch(setLoading(true));
             const res = await axios.post(`${USER_API_END_POINT}/register`, formData, {
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'multipart/form-data' },
                 withCredentials: true,
             });
             if (res.data.success) {
@@ -57,7 +57,7 @@ const Signup = () => {
             }
         } catch (error) {
             console.log(error);
-            toast.error(error.response.data.message);
+            toast.error(res.data.message);
         } finally{
            // dispatch(setLoading(false));
         }

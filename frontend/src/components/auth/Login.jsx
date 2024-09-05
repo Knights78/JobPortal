@@ -6,7 +6,6 @@ import { RadioGroup } from '@radix-ui/react-radio-group'
 import Navbar from '../shared/Navbar'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
-import { Toaster } from 'sonner'
 import { toast } from 'sonner'
 import { USER_API_END_POINT } from '@/utils/constant'
 import { useNavigate } from 'react-router-dom'
@@ -23,7 +22,7 @@ const Login = () => {
     }
     const handleSubmit=async(e)=>{
      e.preventDefault();
-     console.log(input)
+     //console.log(input)
      try {
         const res=await axios.post(`${USER_API_END_POINT}/login`,input,{
             headers:{'Content-Type':'application/json'},
@@ -35,6 +34,7 @@ const Login = () => {
             toast.success(res.data.message);
         }
      } catch (error) {
+        toast.error(res.data.message)
         console.log(error)
      }
     }

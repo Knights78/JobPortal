@@ -40,3 +40,8 @@
 .read-the-docs {
   color: #888;
 }
+.sonner-toast {
+  font-size: 1.5rem; /* Increase font size */
+  padding: 20px; /* Increase padding */
+  max-width: 500px; /* Increase the maximum width */
+}
