@@ -104,7 +104,7 @@ dist
 # vuepress v2.x temp and cache directory
 .temp
 .cache
-
+BackEnd/utils/oauthClient.js
 # Docusaurus cache and generated files
 .docusaurus
 
