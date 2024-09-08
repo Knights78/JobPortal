@@ -12,16 +12,14 @@ const userSchema=new mongoose.Schema({
     },
     phoneNumber:{
         type:Number,
-        required:true
     },
     password:{
         type:String,
-        required:true
+    
     },
     role:{
         type:String,
         enum:['student','recruiter'],
-        required:true
     },
     profile:{
         bio:{type:String},
@@ -34,6 +32,10 @@ const userSchema=new mongoose.Schema({
             default:" "
         }
     },
+    provider: {
+        type: String,
+        default: 'local', // Default 'local' for email-password; 'google' for OAuth
+      }
 
 },{timestamps:true});
 

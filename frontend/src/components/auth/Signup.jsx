@@ -10,7 +10,9 @@ import { toast } from 'sonner'
 import { useDispatch, useSelector } from 'react-redux'
 import { Loader2 } from 'lucide-react'
 import { Button } from '../ui/button'
-
+import { setLoading } from '@/redux/authSlice'
+import { FaGoogle } from "react-icons/fa";
+import {useGoogleLogin} from "@react-oauth/google"
 const Signup = () => {
 
     const [input, setInput] = useState({
@@ -21,7 +23,8 @@ const Signup = () => {
         role: "",
         file: ""
     });
-    const [loading,setLoading]=useState(false)
+    const {loading}=useSelector(store=>store.auth)
+    const dispatch=useDispatch()
     //const {loading,user} = useSelector(store=>store.auth);
     //const dispatch = useDispatch();
    const navigate = useNavigate();
@@ -46,7 +49,7 @@ const Signup = () => {
 
 
         try {
-            //dispatch(setLoading(true));
+            dispatch(setLoading(true));
             const res = await axios.post(`${USER_API_END_POINT}/register`, formData, {
                 headers: { 'Content-Type': 'multipart/form-data' },
                 withCredentials: true,
@@ -59,10 +62,35 @@ const Signup = () => {
             console.log(error);
             toast.error(res.data.message);
         } finally{
-           // dispatch(setLoading(false));
+           dispatch(setLoading(false));
         }
     }
+   
+    const googleLoginSuccess = async (authResult) => {
+        try {
+            const api = axios.create({
+              baseUrl: 'http://localhost:3000/api/v1/user'
+            });
+            const response = await api.post(`${USER_API_END_POINT}/google-login`, authResult);
+            if(response.data.success)
+            {
+                toast.success(response.data.message)
+                navigate('/')
+            }
+            else{
+                toast.success(response.data.message)
+            }
+            
+          } catch (error) {
+            console.log(error);
+          }
+    }
 
+    const handleGoogleLogin = useGoogleLogin({
+        onSuccess: googleLoginSuccess,
+        onError: () => toast.error('Google login failed'),
+        flow: 'auth-code'
+    });
     // useEffect(()=>{
     //     if(user){
     //         navigate("/");
@@ -152,6 +180,9 @@ const Signup = () => {
                     {
                         loading ? <Button className="w-full my-4"> <Loader2 className='mr-2 h-4 w-4 animate-spin' /> Please wait </Button> : <Button type="submit" className="w-full my-4">Signup</Button>
                     }
+                     <div className='my-4'> 
+                        <button className='w-full my-4' onClick={handleGoogleLogin}>Login with google  <FaGoogle/> </button>
+                    </div>
                     <span className='text-sm'>Already have an account? <Link to="/login" className='text-blue-600'>Login</Link></span>
                 </form>
             </div>
@@ -160,3 +191,10 @@ const Signup = () => {
 }
 
 export default Signup
+
+
+// import axios from "axios"
+// const api=axios.create({
+//     baseUrl:'http://localhost:3000/api/v1/user'
+// })
+// export const googlAuth=(code)=>api.get(`/google-login?code=${code}`)

@@ -26,6 +26,7 @@ app.use('/api/v1/company',companyRouter)
 app.use('/api/v1/job',jobRouter)
 app.use('/api/v1/application',applicationRouter)
 
+
 app.listen(PORT,()=>{
     console.log(`server running at http://localhost:${PORT}`)
 })

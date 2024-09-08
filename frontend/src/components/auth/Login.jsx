@@ -5,18 +5,25 @@ import { Input } from '../ui/input'
 import { RadioGroup } from '@radix-ui/react-radio-group'
 import Navbar from '../shared/Navbar'
 import { Link } from 'react-router-dom'
+import { Loader2 } from 'lucide-react'
 import axios from 'axios'
 import { toast } from 'sonner'
 import { USER_API_END_POINT } from '@/utils/constant'
 import { useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { setLoading } from '@/redux/authSlice'
+import { FaGoogle } from "react-icons/fa";
+import {useGoogleLogin} from "@react-oauth/google"
 const Login = () => {
+    const dispatch=useDispatch()
+    const {loading}=useSelector(store=>store.auth)//it will go in store thriugh which it will access the auth then from auth i will take the intial state
     const navigate=useNavigate()
     const[input,setInput]=useState({
         email:"",
         password:"",
         role:""
     })
-    const[loading,setLoading]=useState(false)
+   // const[loading,setLoading]=useState(false)
     const handleonChange = (e) => {
         setInput({ ...input, [e.target.name]: e.target.value });
     }
@@ -24,6 +31,7 @@ const Login = () => {
      e.preventDefault();
      //console.log(input)
      try {
+        dispatch(setLoading(true))
         const res=await axios.post(`${USER_API_END_POINT}/login`,input,{
             headers:{'Content-Type':'application/json'},
             withCredentials:true
@@ -37,7 +45,34 @@ const Login = () => {
         toast.error(res.data.message)
         console.log(error)
      }
+     finally{
+        dispatch(setLoading(false))
+     }
     }
+    const googleLoginSuccess = async (authResult) => {
+        try {
+            const api = axios.create({
+              baseUrl: 'http://localhost:3000/api/v1/user'
+            });
+            const response = await api.post(`${USER_API_END_POINT}/google-login`, authResult);
+            if(response.data.success)
+            {
+                toast.success(response.data.message)
+                navigate('/')
+            }
+            toast.success(response.data.message)
+          } catch (error) {
+            console.log(error);
+          }
+    }
+
+    const handleGoogleLogin = useGoogleLogin({
+        onSuccess: googleLoginSuccess,
+        onError: () => toast.error('Google login failed'),
+        flow: 'auth-code'
+    });
+    
+    
   return (
     <div>
             <Navbar />
@@ -94,6 +129,9 @@ const Login = () => {
                     {
                         loading ? <button className="w-full my-4"> <Loader2 className='mr-2 h-4 w-4 animate-spin' /> Please wait </button> : <button type="submit" className="w-full my-4">Login</button>
                     }
+                    <div>
+                        <button className='w-full my-4' onClick={handleGoogleLogin}>Login with google  <FaGoogle/> </button>
+                    </div>
                     <span className='text-sm'>Don't have an account? <Link to="/signup" className='text-blue-600'>Signup</Link></span>
                 </form>
             </div>

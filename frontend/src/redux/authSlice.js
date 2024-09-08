@@ -11,5 +11,5 @@ const authSlice=createSlice({
     }
 })
 
-export const {setLoading}=authSlice.actions
+export const {setLoading}=authSlice.actions//authSlice will give all the actiosn in which we are removing the setLoading state
 export default authSlice.reducer

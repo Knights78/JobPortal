@@ -4,6 +4,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Signup from './components/auth/Signup'
 import Login from './components/auth/Login'
 import Home from './Home'
+import {GoogleOAuthProvider} from "@react-oauth/google"
 const appRouter=createBrowserRouter([
   {
     path:'/',
@@ -19,12 +20,11 @@ const appRouter=createBrowserRouter([
   },
 ])
 const App = () => {
+  
   return (
-    <>
-    <RouterProvider router={appRouter} />
-    </>
-    
-   
+    <GoogleOAuthProvider clientId="110336232874-1vqqams19gtugdgcja15hqmoirnj5hu3.apps.googleusercontent.com">
+      <RouterProvider router={appRouter} />
+    </GoogleOAuthProvider>
   )
 }
 

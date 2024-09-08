@@ -1,6 +1,9 @@
 import { User } from "../models/user.model.js"
 import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
+import { oauth2client } from "../utils/oauthClient.js"
+import axios from "axios"
+
 export const register=async(req,res)=>{
     try {
         const{fullname,email,phoneNumber,password,role}=req.body
@@ -159,3 +162,45 @@ export const updateProfile=async(req,res)=>{
         console.log(error,"update error")
     }
 }
+
+export const googleLogin = async (req, res) => {
+    
+      try {
+        const {code}=req.body;
+        //console.log(code)
+        const googleRes=await oauth2client.getToken(code);//to get the code
+        //console.log(googleRes)
+        oauth2client.setCredentials(googleRes.tokens)
+        //calling google api now
+        const userRes=await axios.get(`https://www.googleapis.com/oauth2/v2/userinfo?alt=json&access_token=${googleRes.tokens.access_token}`)
+        const {name,email,picture}=userRes.data
+        //console.log("name",name,'email',email)
+        let user=await User.findOne({email})
+        //console.log(user)
+        if(!user)
+        {
+            user = await User.create({
+                fullname: name,
+                email: email,
+                profile: {
+                  profilePhoto: picture,
+                },
+                provider:"google"
+              });
+            const {_id}=user;
+            const token=jwt.sign({_id},process.env.SECRET_KEY,{expiresIn:"7d"})
+            return res.json({
+                success:true,
+                token,
+                user,
+                message:"SUCCESS GOOGLE AUTH"
+            })
+        }
+      } catch (error) {
+       console.log(error) 
+       return res.json({
+        success:false,
+        message:"GOGGLE AUTH FAILEd"
+       })
+      }
+  }
