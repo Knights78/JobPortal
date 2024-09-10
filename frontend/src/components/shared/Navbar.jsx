@@ -7,25 +7,52 @@ import axios from 'axios'
 import { LogOut, User2 } from 'lucide-react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
+import { gapi } from 'gapi-script';
+import { useEffect } from 'react'
 const Navbar = () => {
     // const { user } = useSelector(store => store.auth);
-    // const navigate=useNavigate();
+    const navigate=useNavigate();
     // const dispatch=useDispatch();
-    const logoutHandler=async()=>{
-       try {
-        const res=await axios.get(`http://localhost:3000/api/v1/user/logout`, { withCredentials: true })
-        if(res.data.success)
-        {
-                dispatch(setUser(null));
-                navigate("/");
-                toast.success(res.data.message);
+    const logoutHandler = async () => {
+        try {
+          const auth2 = gapi.auth2.getAuthInstance();
+          console.log(auth2)
+          if (auth2 && auth2.isSignedIn.get()) {
+            console.log("Inside")
+            await auth2.signOut();
+            console.log('User signed out from Google');
+      
+            // Check if the user is signed out
+            const isLoggedOut = !auth2.isSignedIn.get();
+            if (isLoggedOut) {
+              console.log('Google logout successful');
+            } else {
+              console.log('Google logout failed');
+            }
+          }
+      
+          // Proceed with backend logout
+          const res = await axios.get(`http://localhost:3000/api/v1/user/logout`, { withCredentials: true });
+          
+          if (res.data.success) {
+           // dispatch(setUser(null));
+            navigate("/");
+            toast.success(res.data.message);
+          }
+        } catch (error) {
+          console.log(error);
+          toast.error(error.response?.data?.message || 'Logout failed');
         }
-
-       } catch (error) {
-        console.log(error)
-        toast.error(error.response.data.message);
-       }
-    }
+      };
+      
+      // Ensure gapi.auth2 is initialized properly on component mount
+      useEffect(() => {
+        gapi.load('auth2', () => {
+          gapi.auth2.init({
+            clientId: '110336232874-1vqqams19gtugdgcja15hqmoirnj5hu3.apps.googleusercontent.com',
+          });
+        });
+      }, []);
     const user=false
   return (
     <div className='bg-white'>

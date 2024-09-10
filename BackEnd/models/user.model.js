@@ -35,7 +35,12 @@ const userSchema=new mongoose.Schema({
     provider: {
         type: String,
         default: 'local', // Default 'local' for email-password; 'google' for OAuth
-      }
+      },
+      googleId: {
+        type: String,
+        unique: true,
+        required: false,  // This can be false if not all users will use Google
+      },
 
 },{timestamps:true});
 

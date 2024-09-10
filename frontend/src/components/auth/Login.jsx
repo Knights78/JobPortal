@@ -49,20 +49,32 @@ const Login = () => {
         dispatch(setLoading(false))
      }
     }
-    const googleLoginSuccess = async (authResult) => {
+    const googleLoginSuccess=async(authResult)=>{
         try {
+            // Initialize Axios with base URL
             const api = axios.create({
-              baseUrl: 'http://localhost:3000/api/v1/user'
+              baseURL: 'http://localhost:3000/api/v1/user',
             });
-            const response = await api.post(`${USER_API_END_POINT}/google-login`, authResult);
-            if(response.data.success)
-            {
-                toast.success(response.data.message)
-                navigate('/')
+        
+            // Send auth code to the backend to handle Google login/signup
+            const response = await api.post(`/google-login`, { code: authResult.code });
+        
+            if (response.data.success) {
+              localStorage.setItem('token', response.data.token);
+              toast.success(response.data.message);
+              navigate('/');
+            } else {
+              // Handle user exists but different provider
+              if (response.data.message.includes('different provider')) {
+                toast.error(response.data.message);
+                navigate('/login'); // Or redirect to an appropriate page
+              } else {
+                toast.error(response.data.message);
+              }
             }
-            toast.success(response.data.message)
           } catch (error) {
             console.log(error);
+            toast.error('Google login failed. Please try again.');
           }
     }
 

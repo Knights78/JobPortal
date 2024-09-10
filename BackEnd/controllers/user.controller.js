@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
 import { oauth2client } from "../utils/oauthClient.js"
 import axios from "axios"
-
+import { verifyIdToken } from "../middleware/verifyGoogleToken.js"
 export const register=async(req,res)=>{
     try {
         const{fullname,email,phoneNumber,password,role}=req.body
@@ -162,45 +162,103 @@ export const updateProfile=async(req,res)=>{
         console.log(error,"update error")
     }
 }
-
 export const googleLogin = async (req, res) => {
-    
-      try {
-        const {code}=req.body;
-        //console.log(code)
-        const googleRes=await oauth2client.getToken(code);//to get the code
-        //console.log(googleRes)
-        oauth2client.setCredentials(googleRes.tokens)
-        //calling google api now
-        const userRes=await axios.get(`https://www.googleapis.com/oauth2/v2/userinfo?alt=json&access_token=${googleRes.tokens.access_token}`)
-        const {name,email,picture}=userRes.data
-        //console.log("name",name,'email',email)
-        let user=await User.findOne({email})
-        //console.log(user)
-        if(!user)
-        {
-            user = await User.create({
-                fullname: name,
-                email: email,
-                profile: {
-                  profilePhoto: picture,
-                },
-                provider:"google"
-              });
-            const {_id}=user;
-            const token=jwt.sign({_id},process.env.SECRET_KEY,{expiresIn:"7d"})
-            return res.json({
-                success:true,
-                token,
-                user,
-                message:"SUCCESS GOOGLE AUTH"
-            })
+    try {
+      const { code } = req.body;
+  
+      // Get the Google token using the auth code
+      const googleRes = await oauth2client.getToken(code);
+      oauth2client.setCredentials(googleRes.tokens);
+  
+      // Get user info from Google API
+      const userRes = await axios.get(
+        `https://www.googleapis.com/oauth2/v2/userinfo?alt=json&access_token=${googleRes.tokens.access_token}`
+      );
+      const { id: googleId, name, email, picture } = userRes.data;
+  
+      // Check if user exists in DB
+      let user = await User.findOne({ email });
+  
+      if (user) {
+        // Check if the user was registered with Google
+        if (user.provider !== 'google') {
+          return res.json({
+            success: false,
+            message: "User exists with different provider. Please use regular login."
+          });
         }
-      } catch (error) {
-       console.log(error) 
-       return res.json({
-        success:false,
-        message:"GOGGLE AUTH FAILEd"
-       })
+  
+        // User exists and is logged in via Google - generate JWT token
+        const token = jwt.sign({ _id: user._id }, process.env.SECRET_KEY, { expiresIn: "7d" });
+  
+        return res.json({
+          success: true,
+          token,
+          user,
+          message: "User logged in successfully with Google.",
+        });
       }
-  }
+  
+      // If user doesn't exist, create a new user
+      user = await User.create({
+        googleId,
+        fullname: name,
+        email,
+        profile: {
+          profilePhoto: picture,
+        },
+        provider: "google",
+      });
+  
+      const { _id } = user;
+      const token = jwt.sign({ _id }, process.env.SECRET_KEY, { expiresIn: "7d" });
+  
+      return res.json({
+        success: true,
+        token,
+        user,
+        message: "User signed up successfully with Google.",
+      });
+    } catch (error) {
+      console.log(error);
+      return res.json({
+        success: false,
+        message: "Google authentication failed.",
+      });
+    }
+  };
+  
+
+//   export const googleLoginVerify = async (req, res) => {
+//     try {
+//       const { googleAccessToken } = req.body;
+  
+//       // Verify the Google access token using the Google API
+//       const response = await axios.get(`https://openidconnect.googleapis.com/v1/userinfo?access_token=${googleAccessToken}`);
+  
+//       if (response.status !== 200) {
+//         return res.status(401).json({ message: 'Invalid Google credentials' });
+//       }
+  
+//       const googleId = response.data.sub; // Assuming the user ID is in the response
+  
+//       // Find the user in your database based on the Google ID
+//       const user = await User.findOne({ googleId });
+  
+//       if (!user) {
+//         return res.status(401).json({ message: 'Invalid Google credentials' });
+//       }
+  
+//       // Generate a JWT token for the user
+//       const accessToken = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+  
+//       res.json({
+//         success: true,
+//         accessToken,
+//         user,
+//       });
+//     } catch (error) {
+//       console.error(error);
+//       res.status(500).json({ message: 'Server error' });
+//     }
+//   }
