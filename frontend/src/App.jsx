@@ -1,10 +1,10 @@
 import React from 'react'
-import Navbar from './components/shared/Navbar'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Signup from './components/auth/Signup'
 import Login from './components/auth/Login'
 import Home from './Home'
 import {GoogleOAuthProvider} from "@react-oauth/google"
+import JobPage from './components/JobPage'
 const appRouter=createBrowserRouter([
   {
     path:'/',
@@ -18,6 +18,10 @@ const appRouter=createBrowserRouter([
     path:'/signup',
     element:<Signup/>
   },
+  {
+    path:'/jobs',
+    element:<JobPage/>
+  }
 ])
 const App = () => {
   
