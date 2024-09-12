@@ -13,6 +13,7 @@ import { Button } from '../ui/button'
 import { setLoading } from '@/redux/authSlice'
 import { FaGoogle } from "react-icons/fa";
 import {useGoogleLogin} from "@react-oauth/google"
+
 const Signup = () => {
 
     const [input, setInput] = useState({
@@ -58,10 +59,16 @@ const Signup = () => {
                 navigate("/login");
                 toast.success(res.data.message);
             }
-        } catch (error) {
+        }
+        catch (error) {
+            if (error.response && error.response.data && error.response.data.message) {
+                toast.error(error.response.data.message); // Display error message from backend
+            } else {
+                toast.error("Signup failed"); // Default error message
+            }
             console.log(error);
-            toast.error(res.data.message);
-        } finally{
+        } 
+        finally{
            dispatch(setLoading(false));
         }
     }

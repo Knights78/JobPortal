@@ -5,6 +5,8 @@ import Login from './components/auth/Login'
 import Home from './Home'
 import {GoogleOAuthProvider} from "@react-oauth/google"
 import JobPage from './components/JobPage'
+import BrowsePage from './components/BrowsePage'
+import ProfilePage from './components/ProfilePage'
 const appRouter=createBrowserRouter([
   {
     path:'/',
@@ -21,7 +23,15 @@ const appRouter=createBrowserRouter([
   {
     path:'/jobs',
     element:<JobPage/>
+  },{
+    path:'/browse',
+    element:<BrowsePage/>
+  },
+  {
+    path:'/profile',
+    element:<ProfilePage/>
   }
+
 ])
 const App = () => {
   

@@ -102,16 +102,20 @@ export const login=async(req,res)=>{
     }
 }
 
-export const logout=async(req,res)=>{
+export const logout = async (req, res) => {
     try {
-        return res.cookie("token","").json({
-            message:"Logout succesfully",
-            success:true
-        });
+      return res.cookie("token", "", {
+        httpOnly: true,
+        expires: new Date(0) // Expire immediately to clear cookie
+      }).json({
+        message: "Logout successfully",
+        success: true
+      });
     } catch (error) {
-        console.log(error,"Logout error")
+      console.log("Logout error", error);
+      return res.status(500).json({ message: "Logout failed" });
     }
-}
+  };
 
 
 export const updateProfile=async(req,res)=>{
@@ -190,7 +194,7 @@ export const googleLogin = async (req, res) => {
   
         // User exists and is logged in via Google - generate JWT token
         const token = jwt.sign({ _id: user._id }, process.env.SECRET_KEY, { expiresIn: "7d" });
-  
+      //  console.log("USER",user)
         return res.json({
           success: true,
           token,

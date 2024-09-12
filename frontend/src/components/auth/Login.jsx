@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setLoading } from '@/redux/authSlice'
 import { FaGoogle } from "react-icons/fa";
 import {useGoogleLogin} from "@react-oauth/google"
+import { setUser } from '@/redux/authSlice'
 const Login = () => {
     const dispatch=useDispatch()
     const {loading}=useSelector(store=>store.auth)//it will go in store thriugh which it will access the auth then from auth i will take the intial state
@@ -23,6 +24,7 @@ const Login = () => {
         password:"",
         role:""
     })
+
    // const[loading,setLoading]=useState(false)
     const handleonChange = (e) => {
         setInput({ ...input, [e.target.name]: e.target.value });
@@ -38,18 +40,26 @@ const Login = () => {
         })
         if(res.data.success)
         {
+            dispatch(setUser(res.data.user))
+            console.log(res.data.user)
             navigate('/')
             toast.success(res.data.message);
         }
-     } catch (error) {
-        toast.error(res.data.message)
-        console.log(error)
-     }
+     } 
+     catch (error) {
+        if (error.response && error.response.data && error.response.data.message) {
+            toast.error(error.response.data.message); // Display error message from backend
+        } else {
+            toast.error("Login failed"); // Default error message
+        }
+        console.log(error);
+    }
      finally{
         dispatch(setLoading(false))
      }
     }
     const googleLoginSuccess=async(authResult)=>{
+        
         try {
             // Initialize Axios with base URL
             const api = axios.create({
@@ -58,10 +68,12 @@ const Login = () => {
         
             // Send auth code to the backend to handle Google login/signup
             const response = await api.post(`/google-login`, { code: authResult.code });
-        
+            
             if (response.data.success) {
               localStorage.setItem('token', response.data.token);
+             // console.log(response.data.user)
               toast.success(response.data.message);
+              dispatch(setUser(response.data.user))
               navigate('/');
             } else {
               // Handle user exists but different provider

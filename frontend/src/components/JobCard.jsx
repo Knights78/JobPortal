@@ -1,5 +1,6 @@
 import React from 'react'
 import { Badge } from './ui/badge'
+//this is the latest job card which is been shown
 export const JobCard = () => {
   return (
 <div  className='p-8  rounded-lg shadow-2xl bg-white border border-gray-400 cursor-pointer w-[500px] h-[400px]'>

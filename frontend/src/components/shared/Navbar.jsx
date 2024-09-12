@@ -9,20 +9,25 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import { gapi } from 'gapi-script';
 import { useEffect } from 'react'
+import { setUser } from '@/redux/authSlice'
 const Navbar = () => {
-    // const { user } = useSelector(store => store.auth);
+     const {user} = useSelector(store => store.auth);
+    // console.log(user)
     const navigate=useNavigate();
-    // const dispatch=useDispatch();
-    const logoutHandler = async () => {
-        try {
+     const dispatch=useDispatch();
+     const logoutHandler = async () => {
+      try {
+        // Check if Google Auth is initialized
+        if (gapi && gapi.auth2) {
           const auth2 = gapi.auth2.getAuthInstance();
-          console.log(auth2)
           if (auth2 && auth2.isSignedIn.get()) {
-            console.log("Inside")
+            console.log("User is signed in with Google");
+    
+            // Sign out from Google
             await auth2.signOut();
             console.log('User signed out from Google');
-      
-            // Check if the user is signed out
+            
+            // Check if Google sign-out was successful
             const isLoggedOut = !auth2.isSignedIn.get();
             if (isLoggedOut) {
               console.log('Google logout successful');
@@ -30,30 +35,36 @@ const Navbar = () => {
               console.log('Google logout failed');
             }
           }
-      
-          // Proceed with backend logout
-          const res = await axios.get(`http://localhost:3000/api/v1/user/logout`, { withCredentials: true });
-          
-          if (res.data.success) {
-           // dispatch(setUser(null));
-            navigate("/");
-            toast.success(res.data.message);
-          }
-        } catch (error) {
-          console.log(error);
-          toast.error(error.response?.data?.message || 'Logout failed');
         }
-      };
-      
-      // Ensure gapi.auth2 is initialized properly on component mount
-      useEffect(() => {
-        gapi.load('auth2', () => {
-          gapi.auth2.init({
-            clientId: '110336232874-1vqqams19gtugdgcja15hqmoirnj5hu3.apps.googleusercontent.com',
-          });
+    
+        // Proceed with backend logout (works for both Google and non-Google users)
+        const res = await axios.get(`http://localhost:3000/api/v1/user/logout`, { withCredentials: true });
+        
+        if (res.data.success) {
+          // Clear user state after successful logout
+          dispatch(setUser(null));
+          navigate("/");
+          toast.success(res.data.message);
+        } else {
+          toast.error('Logout failed');
+        }
+    
+      } catch (error) {
+        console.error(error);
+        toast.error(error.response?.data?.message || 'Logout failed');
+      }
+    };
+    
+    // Ensure gapi.auth2 is initialized properly on component mount
+    useEffect(() => {
+      gapi.load('auth2', () => {
+        gapi.auth2.init({
+          clientId: '110336232874-1vqqams19gtugdgcja15hqmoirnj5hu3.apps.googleusercontent.com',
         });
-      }, []);
-    const user=false
+      });
+    }, []);
+    
+    
   return (
     <div className='bg-white'>
     <div className='flex items-center justify-between mx-auto max-w-7xl h-16'>
@@ -101,7 +112,7 @@ const Navbar = () => {
                                     <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
                                 </Avatar>
                                 <div className='mx-1.5 mb-4 '>
-                                    <h4 className='font-medium mx-1.5'>MOHD SAIF</h4>
+                                    <h4 className='font-medium mx-1.5'>{user.fullname}</h4>
                                     <p className='text-sm text-muted-foreground'>WEB DEVELOPER</p>
                                 </div>
                             </div>

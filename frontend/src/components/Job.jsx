@@ -3,6 +3,7 @@ import { Button } from './ui/button'
 import { Bookmark } from 'lucide-react'
 import { Avatar, AvatarImage } from './ui/avatar'
 import { Badge } from './ui/badge'
+//this is the job where user will search
 export const Job = () => {
     return (
         <div className='p-8 rounded-md shadow-xl bg-white border border-gray-100 w-full'> {/* Set width to full to fill the grid */}
