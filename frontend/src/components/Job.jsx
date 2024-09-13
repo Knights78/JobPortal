@@ -3,8 +3,11 @@ import { Button } from './ui/button'
 import { Bookmark } from 'lucide-react'
 import { Avatar, AvatarImage } from './ui/avatar'
 import { Badge } from './ui/badge'
+import { useNavigate } from 'react-router-dom'
 //this is the job where user will search
 export const Job = () => {
+    const navigate=useNavigate()
+    const jobId=10
     return (
         <div className='p-8 rounded-md shadow-xl bg-white border border-gray-100 w-full'> {/* Set width to full to fill the grid */}
             <div className='flex items-center justify-between'>
@@ -36,7 +39,7 @@ export const Job = () => {
                 <Badge className={'text-[#7209b7] font-bold'} variant="ghost">job?.salaryLPA</Badge>
             </div>
             <div className='flex items-center gap-6 mt-6'>
-                <Button variant="outline">Details</Button>
+                <Button onClick={()=>navigate(`/description/${jobId}`)} variant="outline">Details</Button>
                 <Button className="bg-[#7209b7]">Save For Later</Button>
             </div>
         </div>

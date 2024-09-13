@@ -1,45 +1,72 @@
 import React, { useState } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "./ui/dialog";
+import {Dialog,DialogContent,DialogFooter,DialogHeader, DialogTitle} from "./ui/dialog";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button"; // assuming you have a Select component
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-  } from "@/components/ui/select"
+import {Select,SelectContent, SelectItem,SelectTrigger,SelectValue,} from "@/components/ui/select"
 import { Loader2 } from "lucide-react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
+import { USER_API_END_POINT } from "@/utils/constant";
+import { setLoading, setUser } from "@/redux/authSlice";
+import { toast } from 'sonner'
 
 const UpdateProfileDialog = ({ open, setOpen, user }) => {
+  const dispatch=useDispatch()
+  const { loading } = useSelector((store) => store.auth);
+  console.log(loading)
   // Initialize input state
   const [input, setInput] = useState({
     fullname: user?.fullname || "",
     email: user?.email || "",
     phoneNumber: user?.phoneNumber || "",
-    bio: "",
-    skills: "",
-    file: "",
+    bio: user?.profile?.bio || "",
+    skills: user?.profile?.skills?.map(skill => skill) || "",
+    file: user?.profile?.resume || "",
     role: "", // Added role field
   });
 
-  // Event handler for input change
+  
+  const fileChangeHandler = (e) => {
+    const file = e.target.files?.[0];
+    setInput({ ...input, file })
+}
+
   const changeEventHandler = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
   };
-  //console.log(user)
-  // Getting loading state from Redux store
-  const { loading } = useSelector((store) => store.auth);
+  const handleSubmit=async(e)=>{
+    e.preventDefault();
+    try {
+        setLoading(true)
+       const res=await axios.post(`${USER_API_END_POINT}/profile/update`,input,{
+        headers:{
+          'Content-Type': 'application/json'
+        },
+        withCredentials: true,
+       })
+       //console.log(res)
+       if(res.data.success)
+       {
+        //console.log("jhjbfhksbhbvkhsdb")
+          dispatch(setUser(res.data.user))
+          toast.success(res.data.message);
+          
+       }
+    } catch (error) {
+      console.log(error)
+      toast.error(error.res.data.message)
+    }
+    finally{
+      setLoading(false)
+    }
+    setOpen(false);
+  }
+  //console.log(input)
+  
+  
 
-  // Check if the provider is Google
+
   const isGoogleLogin = user?.provider === "google";
   //console.log(isGoogleLogin)
 
@@ -53,7 +80,7 @@ const UpdateProfileDialog = ({ open, setOpen, user }) => {
           <DialogHeader>
             <DialogTitle>Update Profile</DialogTitle>
           </DialogHeader>
-          <form>
+          <form onSubmit={handleSubmit}>
             <div className="grid gap-4 py-4">
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="name" className="text-right">
@@ -127,6 +154,7 @@ const UpdateProfileDialog = ({ open, setOpen, user }) => {
                   type="file"
                   accept="application/pdf"
                   className="col-span-3"
+                  onChange={fileChangeHandler}
                 />
               </div>
 

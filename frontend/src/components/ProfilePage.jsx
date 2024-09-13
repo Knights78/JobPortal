@@ -9,11 +9,14 @@ import { Label } from "@radix-ui/react-label";
 import AppliedJobTable from "./AppliedJobTable";
 import UpdateProfileDialog from "./UpdateProfileDialog";
 import { useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 const ProfilePage = () => {
-  const skills=["html","css","Js"]
-  const [open,setOpen]=useState(true)
+  
+  const [open,setOpen]=useState(false)
   const haveResume=true
   const {user}=useSelector(store=>store.auth)
+  const navigate=useNavigate()
+  
 //  console.log("Profile page user",user)
   return (
     <div>
@@ -22,45 +25,48 @@ const ProfilePage = () => {
         <div className="flex justify-between">
           <div className="flex items-center gap-5">
             <Avatar className="h-24 2-24">
-              <AvatarImage src=""></AvatarImage>
+              <AvatarImage src="https://www.shutterstock.com/image-vector/circle-line-simple-design-logo-600nw-2174926871.jpg" className="h-20 w-20"></AvatarImage>
             </Avatar>
             <div>
-              <h1 className="text-xl font-bold">Full Name</h1>
+              <h1 className="text-xl font-bold">{user?.fullname}</h1>
               <p>
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                Voluptatibus pariatur iure exercitationem.
+              {user?.profile?.bio}
               </p>
             </div>
           </div>
-          <Button>
-            <Pen />
+          <Button onClick={()=>setOpen(true)}>
+            
+              <Pen/>
+            
           </Button>
         </div>
         <div className="my-5 flex flex-col gap-5">
           <div className="flex items-center gap-5">
             <Mail />
-            <span>saifushaikh102@gmail.com</span>
+            <span>{user?.email}</span>
           </div>
           <div className="flex items-center gap-5">
             <Phone />
-            <span>778718819</span>
+            <span>{user?.phoneNumber}</span>
           </div>
         </div>
         <div>
           <h1 className="font-bold text-lg">skills</h1>
             <div  className='flex items-center  gap-2'>
-            {skills.map((item, key) => (
-               skills.length==0? <Badge className='text-lg'>{item}</Badge>:<span>NA</span>
-            ))}
+            {
+                user?.profile?.skills.length !== 0 ? user?.profile?.skills.map((item, index) => <Badge key={index}>{item}</Badge>) : <span>NA</span>
+            }
             </div>
         </div>
         <div className='grid w-full max-w-sm items-center gap-1.5 mt-5'>
                     <Label className="text-lg font-bold">Resume</Label>
-                    {haveResume ? <a target='blank' className='text-blue-500 w-full hover:underline cursor-pointer'>user?.profile?.resumeOriginalName</a>: <span>NA</span>}    
+                    {
+                        haveResume ? <a target='blank' href={user?.profile?.resume} className='text-blue-500 w-full hover:underline cursor-pointer'>{user?.profile?.resumeOriginalName}</a> : <span>NA</span>
+                    }    
         </div>
 
       </div> 
-      <div className='max-w-4xl mx-auto bg-white rounded-2xl mt-10'>
+      <div className='w-[100%] pl-40 ml-[300px] bg-white rounded-2xl mt-10'>
                 <h1 className='font-bold text-lg my-5'>Applied Jobs</h1>
                 {/* Applied Job Table   */}
                 <AppliedJobTable />

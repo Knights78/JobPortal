@@ -121,12 +121,24 @@ export const logout = async (req, res) => {
 export const updateProfile=async(req,res)=>{
     try {
         const{fullname,email,phoneNumber,bio,skills}=req.body
-        const file = req.file;
+        //const file = req.file;
        
-            let skillsArray;
-            if(skills){
-                skillsArray = skills.split(",");
-            }
+        let skillsArray = [];
+        // Check if skills is provided and is a string
+        if (skills) {
+          if (typeof skills === "string") {
+            // If it's a string, split it into an array
+            skillsArray = skills.split(",");
+          } else if (Array.isArray(skills)) {
+            // If it's already an array, use it directly
+            skillsArray = skills;
+          } else {
+            return res.status(400).json({
+              message: "Invalid format for skills",
+              success: false,
+            });
+          }
+        }
           const userId=req.id
           let user=await User.findById(userId)
           if(!user)
@@ -153,6 +165,7 @@ export const updateProfile=async(req,res)=>{
             role: user.role,
             profile: user.profile
         }
+        console.log("USER",user)
 
         return res.status(200).json({
             message:"Profile updated successfully.",
