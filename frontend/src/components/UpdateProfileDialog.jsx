@@ -14,7 +14,7 @@ import { toast } from 'sonner'
 const UpdateProfileDialog = ({ open, setOpen, user }) => {
   const dispatch=useDispatch()
   const { loading } = useSelector((store) => store.auth);
-  console.log(loading)
+  //console.log(loading)
   // Initialize input state
   const [input, setInput] = useState({
     fullname: user?.fullname || "",
@@ -35,33 +35,41 @@ const UpdateProfileDialog = ({ open, setOpen, user }) => {
   const changeEventHandler = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
   };
-  const handleSubmit=async(e)=>{
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    //console.log(input.file)
     try {
-        setLoading(true)
-       const res=await axios.post(`${USER_API_END_POINT}/profile/update`,input,{
-        headers:{
-          'Content-Type': 'application/json'
+      dispatch(setLoading(true));
+      
+      // Create a FormData object
+      const formData = new FormData();
+      formData.append("fullname", input.fullname);
+      formData.append("email", input.email);
+      formData.append("phoneNumber", input.phoneNumber);
+      formData.append("bio", input.bio);
+      formData.append("skills", input.skills);
+      formData.append("file", input.file); // append file
+      
+      const res = await axios.post(`${USER_API_END_POINT}/profile/update`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
         },
         withCredentials: true,
-       })
-       //console.log(res)
-       if(res.data.success)
-       {
-        //console.log("jhjbfhksbhbvkhsdb")
-          dispatch(setUser(res.data.user))
-          toast.success(res.data.message);
-          
-       }
+      });
+      //console.log(res)
+  
+      if (res.data.success) {
+        dispatch(setUser(res.data.user));
+        toast.success(res.data.message);
+      }
     } catch (error) {
-      console.log(error)
-      toast.error(error.res.data.message)
-    }
-    finally{
-      setLoading(false)
+      console.log(error);
+      toast.error(error.response?.data?.message || 'Error updating profile');
+    } finally {
+      dispatch(setLoading(false));
     }
     setOpen(false);
-  }
+  };
   //console.log(input)
   
   
