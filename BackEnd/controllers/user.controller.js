@@ -17,6 +17,9 @@ export const register=async(req,res)=>{
                 success:false
             })
         }
+        const file=req.file
+        const fileUri=getDataUri(file);
+        const cloudResponse=await cloudinary.uploader.upload(fileUri.content)
         const user=await User.findOne({email})//key value pair of email is same that is why written only one timr
         //if already same email is regsteres
         if(user)
@@ -33,7 +36,11 @@ export const register=async(req,res)=>{
             email,
             phoneNumber,
             password:hashedPassword,
-            role
+            role,
+            profile:{
+              profilePhoto:cloudResponse.secure_url
+            },
+           //bt default provider is local only
         })
         return res.json({
             message:"account created succesfully",
@@ -234,6 +241,16 @@ export const googleLogin = async (req, res) => {
           message: "User logged in successfully with Google.",
         });
       }
+      // const response = await axios.get(picture, { responseType: 'arraybuffer' });
+      // const imageBuffer = Buffer.from(response.data, 'binary');
+      
+      // // Upload image to Cloudinary
+      // const cloudResponse = await cloudinary.uploader.upload_stream({
+      //   folder: 'Jobhunt',
+      //   resource_type: 'image',
+      // }).end(imageBuffer);
+  
+      // const { secure_url } = cloudResponse;
   
       // If user doesn't exist, create a new user
       user = await User.create({
@@ -241,7 +258,7 @@ export const googleLogin = async (req, res) => {
         fullname: name,
         email,
         profile: {
-          profilePhoto: picture,
+          profilePhoto: picture
         },
         provider: "google",
       });

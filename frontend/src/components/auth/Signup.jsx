@@ -10,7 +10,7 @@ import { toast } from 'sonner'
 import { useDispatch, useSelector } from 'react-redux'
 import { Loader2 } from 'lucide-react'
 import { Button } from '../ui/button'
-import { setLoading } from '@/redux/authSlice'
+import { setLoading, setUser } from '@/redux/authSlice'
 import { FaGoogle } from "react-icons/fa";
 import {useGoogleLogin} from "@react-oauth/google"
 
@@ -75,6 +75,7 @@ const Signup = () => {
    
     const googleLoginSuccess = async (authResult) => {
         try {
+            dispatch(setLoading(true))
             // Initialize Axios with base URL
             const api = axios.create({
               baseURL: 'http://localhost:3000/api/v1/user',
@@ -85,6 +86,7 @@ const Signup = () => {
         
             if (response.data.success) {
               localStorage.setItem('token', response.data.token);
+              dispatch(setUser(response.data.user))
               toast.success(response.data.message);
               navigate('/');
             } else {
@@ -99,6 +101,9 @@ const Signup = () => {
           } catch (error) {
             console.log(error);
             toast.error('Google login failed. Please try again.');
+          }
+          finally{
+            setLoading(false)
           }
       };
 
