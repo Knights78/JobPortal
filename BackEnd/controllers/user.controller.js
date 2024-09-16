@@ -4,6 +4,8 @@ import jwt from "jsonwebtoken"
 import { oauth2client } from "../utils/oauthClient.js"
 import axios from "axios"
 import { verifyIdToken } from "../middleware/verifyGoogleToken.js"
+import getDataUri from "../utils/dataUri.js"
+import cloudinary from "../utils/cloudinary.js"
 export const register=async(req,res)=>{
     try {
         const{fullname,email,phoneNumber,password,role}=req.body
@@ -121,8 +123,13 @@ export const logout = async (req, res) => {
 export const updateProfile=async(req,res)=>{
     try {
         const{fullname,email,phoneNumber,bio,skills}=req.body
-        //const file = req.file;
-       
+        const file=req.file
+        //console.log("data receiverd",req.body)
+        //console.log("File received in the backend:", req.file);
+        
+        //const fileUri=getDataUri(file)
+        //const cloudResponse=await cloudinary.uploader.upload(fileUri.content)
+       // console.log(cloudResponse)
         let skillsArray = [];
         // Check if skills is provided and is a string
         if (skills) {
@@ -154,7 +161,19 @@ export const updateProfile=async(req,res)=>{
         if(phoneNumber)  user.phoneNumber = phoneNumber
         if(bio) user.profile.bio = bio
         if(skills) user.profile.skills = skillsArray
-
+        
+        if (file) {
+          const fileUri = getDataUri(file); // Convert to base64 (implement getDataUri if not done already)
+    
+          const cloudResponse = await cloudinary.uploader.upload(fileUri.content, {
+            folder: 'JobHunt', // This will store the resumes in the "resumes" folder
+            resource_type: 'auto', // Ensures it handles various file types
+          });
+    
+          // Store the Cloudinary URL and original file name in the user profile
+          user.profile.resume = cloudResponse.secure_url;
+          user.profile.resumeOriginalName = file.originalname;
+        }
           await user.save()
 
           user = {
@@ -165,7 +184,7 @@ export const updateProfile=async(req,res)=>{
             role: user.role,
             profile: user.profile
         }
-        console.log("USER",user)
+       // console.log("USER",user)
 
         return res.status(200).json({
             message:"Profile updated successfully.",

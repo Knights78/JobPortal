@@ -152,6 +152,16 @@ const UpdateProfileDialog = ({ open, setOpen, user }) => {
                   className="col-span-3"
                 />
               </div>
+              <div>
+              {
+                  input.file && (
+                    <div>
+                      <Label>Existing Resume</Label>
+                      <a target='blank' href={user?.profile?.resume}>Click here</a>
+                    </div>
+                  )
+                }
+              </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="file" className="text-right">
                   Resume
