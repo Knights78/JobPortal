@@ -6,7 +6,9 @@ import './Home.css'
 import Herosection from './components/Herosection'
 import { LatestJobs } from './components/LatestJobs'
 import Footer from './components/shared/Footer'
+import getAllJob from './hooks/getAllJob'
 const Home = () => {
+  getAllJob();
   return (
     <div>
         <Navbar/>

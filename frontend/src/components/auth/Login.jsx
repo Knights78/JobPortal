@@ -15,6 +15,7 @@ import { setLoading } from '@/redux/authSlice'
 import { FaGoogle } from "react-icons/fa";
 import {useGoogleLogin} from "@react-oauth/google"
 import { setUser } from '@/redux/authSlice'
+import useAxiosInterceptor from './useAxiosInterceptor'
 const Login = () => {
     const dispatch=useDispatch()
     const {loading}=useSelector(store=>store.auth)//it will go in store thriugh which it will access the auth then from auth i will take the intial state
@@ -24,7 +25,7 @@ const Login = () => {
         password:"",
         role:""
     })
-
+    useAxiosInterceptor();
    // const[loading,setLoading]=useState(false)
     const handleonChange = (e) => {
         setInput({ ...input, [e.target.name]: e.target.value });
@@ -41,7 +42,7 @@ const Login = () => {
         if(res.data.success)
         {
             dispatch(setUser(res.data.user))
-            console.log(res.data.user)
+            //console.log(res.data.user)
             navigate('/')
             toast.success(res.data.message);
         }
