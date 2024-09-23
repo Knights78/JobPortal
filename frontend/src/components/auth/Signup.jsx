@@ -82,11 +82,12 @@ const Signup = () => {
             });
         
             // Send auth code to the backend to handle Google login/signup
-            const response = await api.post(`/google-login`, { code: authResult.code });
-        
+            const response = await api.post(`/google-login`, { code: authResult.code },{withCredentials:true});
+           // console.log("NEWUSER:",response.data.Newuser)
             if (response.data.success) {
+             //console.log("Inside")
               localStorage.setItem('token', response.data.token);
-              dispatch(setUser(response.data.user))
+              dispatch(setUser(response.data.Newuser))
               toast.success(response.data.message);
               navigate('/');
             } else {

@@ -6,7 +6,7 @@ import { setAllJob } from '@/redux/jobSlice'
 import { toast } from 'sonner'
 const getAllJob = () => {
     const dispatch=useDispatch()
-    console.log("func called")
+    //console.log("func called")
     useEffect(()=>{
         const fetchAllJob=async()=>{
             try {

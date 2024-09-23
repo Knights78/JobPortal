@@ -13,8 +13,10 @@ import { Link, useNavigate } from "react-router-dom";
 const ProfilePage = () => {
   
   const [open,setOpen]=useState(false)
+  
   const haveResume=true
   const {user}=useSelector(store=>store.auth)
+  const isGoogleLogin=user?.provider==='google'
   const navigate=useNavigate()
   
 //  console.log("Profile page user",user)
@@ -71,7 +73,7 @@ const ProfilePage = () => {
                 {/* Applied Job Table   */}
                 <AppliedJobTable />
        </div>
-            <UpdateProfileDialog open={open} setOpen={setOpen} user={user}/>
+            <UpdateProfileDialog open={open} setOpen={setOpen} user={user} isGoogleLogin={isGoogleLogin}/>
     </div>
   );
 };

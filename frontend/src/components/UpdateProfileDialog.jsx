@@ -11,7 +11,8 @@ import { USER_API_END_POINT } from "@/utils/constant";
 import { setLoading, setUser } from "@/redux/authSlice";
 import { toast } from 'sonner'
 
-const UpdateProfileDialog = ({ open, setOpen, user }) => {
+const UpdateProfileDialog = ({ open, setOpen, user,isGoogleLogin}) => {
+  
   const dispatch=useDispatch()
   const { loading } = useSelector((store) => store.auth);
   //console.log(loading)
@@ -26,7 +27,7 @@ const UpdateProfileDialog = ({ open, setOpen, user }) => {
     role: "", // Added role field
   });
 
-  
+  const isRoleSelected = input.role !== "";
   const fileChangeHandler = (e) => {
     const file = e.target.files?.[0];
     setInput({ ...input, file })
@@ -37,7 +38,12 @@ const UpdateProfileDialog = ({ open, setOpen, user }) => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    //console.log(input.file)
+    
+    if (!isRoleSelected && isGoogleLogin) {
+      toast.error("Please select a role before proceeding.");
+      return;
+    }
+
     try {
       dispatch(setLoading(true));
       
@@ -48,7 +54,9 @@ const UpdateProfileDialog = ({ open, setOpen, user }) => {
       formData.append("phoneNumber", input.phoneNumber);
       formData.append("bio", input.bio);
       formData.append("skills", input.skills);
-      formData.append("file", input.file); // append file
+      formData.append("file", input.file);
+      formData.append("role", input.role); // Append role
+      
       
       const res = await axios.post(`${USER_API_END_POINT}/profile/update`, formData, {
         headers: {
@@ -56,8 +64,8 @@ const UpdateProfileDialog = ({ open, setOpen, user }) => {
         },
         withCredentials: true,
       });
-      //console.log(res)
-  
+      //console.log(res.data)
+
       if (res.data.success) {
         dispatch(setUser(res.data.user));
         toast.success(res.data.message);
@@ -68,14 +76,19 @@ const UpdateProfileDialog = ({ open, setOpen, user }) => {
     } finally {
       dispatch(setLoading(false));
     }
-    setOpen(false);
+
+    // Only close if logged in without Google or role is selected
+    if (!isGoogleLogin || isRoleSelected) {
+      setOpen(false);
+    }
   };
+
   //console.log(input)
   
   
 
 
-  const isGoogleLogin = user?.provider === "google";
+  // const isGoogleLogin = user?.provider === "google";
   //console.log(isGoogleLogin)
 
   return (

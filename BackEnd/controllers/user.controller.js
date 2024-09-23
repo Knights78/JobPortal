@@ -129,7 +129,8 @@ export const logout = async (req, res) => {
 
 export const updateProfile=async(req,res)=>{
     try {
-        const{fullname,email,phoneNumber,bio,skills}=req.body
+        const{fullname,email,phoneNumber,bio,skills,role}=req.body
+        //console.log(role)
         const file=req.file
         //console.log("data receiverd",req.body)
         //console.log("File received in the backend:", req.file);
@@ -153,8 +154,9 @@ export const updateProfile=async(req,res)=>{
             });
           }
         }
-          const userId=req.id
-          let user=await User.findById(userId)
+          const id=req.id
+          //console.log(req.id)
+          let user=await User.findById(id)
           if(!user)
           {
             return res.json({
@@ -168,6 +170,7 @@ export const updateProfile=async(req,res)=>{
         if(phoneNumber)  user.phoneNumber = phoneNumber
         if(bio) user.profile.bio = bio
         if(skills) user.profile.skills = skillsArray
+        if(role) user.role=role
         
         if (file) {
           const fileUri = getDataUri(file); // Convert to base64 (implement getDataUri if not done already)
@@ -221,8 +224,9 @@ export const googleLogin = async (req, res) => {
   
       // Check if user exists in DB
       let user = await User.findOne({ email });
-  
+      //console.log("LOginGoogle",user);
       if (user) {
+
         // Check if the user was registered with Google
         if (user.provider !== 'google') {
           return res.json({
@@ -232,14 +236,14 @@ export const googleLogin = async (req, res) => {
         }
   
         // User exists and is logged in via Google - generate JWT token
-        const token = jwt.sign({ _id: user._id }, process.env.SECRET_KEY, { expiresIn: "7d" });
-      //  console.log("USER",user)
-        return res.json({
-          success: true,
-          token,
+        const token = jwt.sign({ userId: user._id }, process.env.SECRET_KEY,{expiresIn:"7d"});
+        //console.log("LOGIN USER",user)
+        //console.log("Login Tokem",token)
+        return res.status(200).cookie("token",token,{httpsOnly:true,sameSite:'strict'}).json({
+          message:"User logged in successfully with Google.",
           user,
-          message: "User logged in successfully with Google.",
-        });
+          success:true
+         })
       }
       // const response = await axios.get(picture, { responseType: 'arraybuffer' });
       // const imageBuffer = Buffer.from(response.data, 'binary');
@@ -253,7 +257,7 @@ export const googleLogin = async (req, res) => {
       // const { secure_url } = cloudResponse;
   
       // If user doesn't exist, create a new user
-      user = await User.create({
+      let Newuser = await User.create({
         googleId,
         fullname: name,
         email,
@@ -263,15 +267,15 @@ export const googleLogin = async (req, res) => {
         provider: "google",
       });
   
-      const { _id } = user;
-      const token = jwt.sign({ _id }, process.env.SECRET_KEY, { expiresIn: "7d" });
-  
-      return res.json({
-        success: true,
-        token,
-        user,
-        message: "User signed up successfully with Google.",
-      });
+      //const Newid = Newuser._id;
+      const token = jwt.sign({ userId:Newuser._id }, process.env.SECRET_KEY, { expiresIn: "7d" });
+      //console.log("Token",token)
+      //console.log("USER",Newuser);
+      return res.status(200).cookie("token",token,{httpsOnly:true,sameSite:'strict' }).json({
+        message:"User signed up successfully with Google.",
+        Newuser,
+        success:true
+       })
     } catch (error) {
       console.log(error);
       return res.json({
@@ -281,37 +285,3 @@ export const googleLogin = async (req, res) => {
     }
   };
   
-
-//   export const googleLoginVerify = async (req, res) => {
-//     try {
-//       const { googleAccessToken } = req.body;
-  
-//       // Verify the Google access token using the Google API
-//       const response = await axios.get(`https://openidconnect.googleapis.com/v1/userinfo?access_token=${googleAccessToken}`);
-  
-//       if (response.status !== 200) {
-//         return res.status(401).json({ message: 'Invalid Google credentials' });
-//       }
-  
-//       const googleId = response.data.sub; // Assuming the user ID is in the response
-  
-//       // Find the user in your database based on the Google ID
-//       const user = await User.findOne({ googleId });
-  
-//       if (!user) {
-//         return res.status(401).json({ message: 'Invalid Google credentials' });
-//       }
-  
-//       // Generate a JWT token for the user
-//       const accessToken = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-  
-//       res.json({
-//         success: true,
-//         accessToken,
-//         user,
-//       });
-//     } catch (error) {
-//       console.error(error);
-//       res.status(500).json({ message: 'Server error' });
-//     }
-//   }

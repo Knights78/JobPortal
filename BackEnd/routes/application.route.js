@@ -6,7 +6,7 @@ import { getApplicants } from "../controllers/application.controller.js"//for ad
 import { updateStatus } from "../controllers/application.controller.js"
 const applicationRouter=express.Router()
 
-applicationRouter.post('/applyJob/:id',isAuthenticated,applyJob)
+applicationRouter.get('/applyJob/:id',isAuthenticated,applyJob)
 
 applicationRouter.get('/getappliedJobs',isAuthenticated,getappliedJobs)
 

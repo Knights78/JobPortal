@@ -25,7 +25,7 @@ const Login = () => {
         password:"",
         role:""
     })
-    useAxiosInterceptor();
+    //useAxiosInterceptor();
    // const[loading,setLoading]=useState(false)
     const handleonChange = (e) => {
         setInput({ ...input, [e.target.name]: e.target.value });
@@ -68,7 +68,7 @@ const Login = () => {
             });
         
             // Send auth code to the backend to handle Google login/signup
-            const response = await api.post(`/google-login`, { code: authResult.code });
+            const response = await api.post(`/google-login`, { code: authResult.code },{withCredentials:true});
             
             if (response.data.success) {
               localStorage.setItem('token', response.data.token);

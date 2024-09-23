@@ -31,6 +31,7 @@ import jwt from "jsonwebtoken";
 export const isAuthenticated = async (req, res, next) => {
     try {
         const token = req.cookies.token;
+        //console.log("isticayedauthen",token)
         if (!token) {
             return res.status(401).json({
                 message: "Token not found (user not authenticated)",
@@ -46,7 +47,7 @@ export const isAuthenticated = async (req, res, next) => {
                 success: false
             });
         }
-
+        //console.log("DECODE",decode)
         req.id = decode.userId;
         next();
 
