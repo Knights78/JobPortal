@@ -7,32 +7,51 @@ import { useSelector } from 'react-redux';
 import { APPLICATION_API_END_POINT } from '@/utils/constant';
 import axios from "axios";
 import { toast } from 'sonner';
-
+import { setSingleJob } from '@/redux/jobSlice';
+import { useDispatch } from 'react-redux';
+import { JOB_API_END_POINT } from '@/utils/constant';
 const JobDescription = () => {
     const singleJob = useSelector(store => store.job.singleJob);
     const { user } = useSelector(store => store.auth);
     const params = useParams();
     const jobId = params.id;
-
-    // Fetch the single job data
-    getSingleJob(jobId);
-
-    // State for whether the job is applied
-    const [isApplied, setIsApplied] = useState(false);
-
+    const isInitiallyApplied = singleJob?.application?.some(application => 
+        application.applicant === user?._id
+    ) || false;
+    const [isApplied, setIsApplied] = useState(isInitiallyApplied);
+   const dispatch=useDispatch()
+    
+    //getSingleJob(jobId);   
+  
     // Update `isApplied` when `singleJob` or `user` changes
     useEffect(() => {
-        if (singleJob && user) {
-            const initiallyApplied = singleJob?.applications?.some(application => application.applicant === user?._id);
-            setIsApplied(initiallyApplied || false);
-        }
-    }, [singleJob, user]);
+        const fetchSingleJob = async () => {
+            try {
+                const res = await axios.get(`${JOB_API_END_POINT}/getJobById/${jobId}`, {
+                    withCredentials: true
+                });
+               
+                if (res.data.success) {
+                    setIsApplied(res.data.job.application.some(application=>application.applicant === user?._id))
+                    dispatch(setSingleJob(res.data.job));
+                }
+            } catch (error) {
+                console.log(error);
+                toast.error(error.response?.data?.message);
+            }
+        };
+
+        fetchSingleJob();
+    }, [singleJob,user?._id,dispatch,jobId]);
+    
 
     // Function to handle job application
     const applyJobHandler = async () => {
         try {
             const res = await axios.get(`${APPLICATION_API_END_POINT}/applyJob/${jobId}`, { withCredentials: true });
             if (res.data.success) {
+                const updatedSingleJob = {...singleJob, application:[...singleJob.application,{applicant:user?._id}]}
+                dispatch(setSingleJob(updatedSingleJob)); // helps us to real time UI update
                 setIsApplied(true); // Set isApplied to true after applying
                 toast.success(res.data.message);
             } else {
@@ -69,7 +88,7 @@ const JobDescription = () => {
                 <h1 className='font-bold my-1'>Description: <span className='pl-4 font-normal text-gray-800'>{singleJob?.description}</span></h1>
                 <h1 className='font-bold my-1'>Experience: <span className='pl-4 font-normal text-gray-800'>{singleJob?.experienceLevel} yrs</span></h1>
                 <h1 className='font-bold my-1'>Salary: <span className='pl-4 font-normal text-gray-800'>{singleJob?.salary} LPA</span></h1>
-                <h1 className='font-bold my-1'>Total Applicants: <span className='pl-4 font-normal text-gray-800'>{singleJob?.applications?.length}</span></h1>
+                <h1 className='font-bold my-1'>Total Applicants: <span className='pl-4 font-normal text-gray-800'>{singleJob?.application?.length}</span></h1>
                 <h1 className='font-bold my-1'>Posted Date: <span className='pl-4 font-normal text-gray-800'>{singleJob?.createdAt?.split("T")[0]}</span></h1>
             </div>
         </div>

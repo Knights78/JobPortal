@@ -3,7 +3,6 @@ import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
 import { oauth2client } from "../utils/oauthClient.js"
 import axios from "axios"
-import { verifyIdToken } from "../middleware/verifyGoogleToken.js"
 import getDataUri from "../utils/dataUri.js"
 import cloudinary from "../utils/cloudinary.js"
 export const register=async(req,res)=>{
@@ -17,9 +16,14 @@ export const register=async(req,res)=>{
                 success:false
             })
         }
-        const file=req.file
-        const fileUri=getDataUri(file);
-        const cloudResponse=await cloudinary.uploader.upload(fileUri.content)
+        const file=req.file || false
+        let cloudResponse
+        if(file)
+        {
+          const fileUri=getDataUri(file);
+           cloudResponse=await cloudinary.uploader.upload(fileUri.content)
+        }
+       
         const user=await User.findOne({email})//key value pair of email is same that is why written only one timr
         //if already same email is regsteres
         if(user)
@@ -38,7 +42,7 @@ export const register=async(req,res)=>{
             password:hashedPassword,
             role,
             profile:{
-              profilePhoto:cloudResponse.secure_url
+              profilePhoto:cloudResponse?.secure_url || " "
             },
            //bt default provider is local only
         })

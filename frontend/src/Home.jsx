@@ -1,6 +1,6 @@
 import React from 'react'
 import Navbar from './components/shared/Navbar'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Category from './components/Category'
 import './Home.css'
 import Herosection from './components/Herosection'
@@ -10,8 +10,10 @@ import getAllJob from './hooks/getAllJob'
 import UpdateProfileDialog from './components/UpdateProfileDialog'
 import { useSelector } from 'react-redux'
 import { useState,useEffect } from 'react'
+
 const Home = () => {
   const {user}=useSelector(store=>store.auth)
+  const navigate=useNavigate()
   //console.log("ROLe",user.role)
   const [openDialog, setOpenDialog] = useState(false);
 
@@ -20,6 +22,11 @@ const Home = () => {
     if (user?.provider === 'google' && !user?.role) {
       setOpenDialog(true); // Automatically open the dialog
     }
+    else if(user?.role=="recruiter")
+      {
+        navigate('/admin/companies')
+      }
+
     else{
       //console.log("ELSE PART")
       setOpenDialog(false)

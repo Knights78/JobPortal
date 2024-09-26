@@ -37,15 +37,17 @@ export const getCompany = async (req, res) => {
     try {
         const userId = req.id; // logged in user id
         const companies = await Company.find({ userId });//find all the company which is been created by this user
-        if (!companies) {
-            return res.status(404).json({
+        //console.log(companies)
+        if (!companies || companies.length==0) {
+            return res.status(200).json({
                 message: "Companies not found.",
                 success: false
             })
         }
         return res.status(200).json({
             companies,
-            success:true
+            success:true,
+            message:"Fetched companies succesfully"
         })
     } catch (error) {
         console.log(error);

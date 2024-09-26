@@ -9,6 +9,10 @@ import BrowsePage from "./components/BrowsePage";
 import ProfilePage from "./components/ProfilePage";
 import JobDescription from "./components/jobDescription";
 import UpdateProfileDialog from "./components/UpdateProfileDialog";
+import Companies from "./components/admin/Companies";
+import CreateCompanies from "./components/admin/CreateCompanies";
+import ProtectedRoute from "./components/admin/ProtectedRoute";
+import CompanySetup from "./components/admin/CompanySetup";
 const appRouter = createBrowserRouter([
   {
     path: "/",
@@ -42,6 +46,20 @@ const appRouter = createBrowserRouter([
     path: "/profile",
     element: <ProfilePage />,
   },
+  //path for admins
+  {
+    path:'/admin/companies',
+    element:<Companies/>
+  },
+  {
+    path:'/admin/companies/create',
+    element:<CreateCompanies/>
+  },
+  {
+    path:'/admin/companies/:id',
+    element:<ProtectedRoute><CompanySetup/></ProtectedRoute>
+    
+  }
 ]);
 const App = () => {
   return (

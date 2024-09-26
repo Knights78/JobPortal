@@ -14,6 +14,7 @@ const Navbar = () => {
   const { user } = useSelector((store) => store.auth);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  //console.log("FFSFSFSFSFSFS",user?.profile?.profilePhoto=="")
   const logoutHandler = async () => {
     try {
       // Check if Google Auth is initialized
@@ -182,13 +183,14 @@ const Navbar = () => {
                     </div>
                   </div>
                   <div className="flex flex-col my-2 text-gray-600">
-                    <div className="flex w-fit items-center gap-2 cursor-pointer">
-                      <User2 />
-                      <Button variant="link">
-                        {" "}
-                        <Link to="/profile">View Profile</Link>
-                      </Button>
-                    </div>
+                            {
+                                    user && user.role === 'student' && (
+                                    <div className='flex w-fit items-center gap-2 cursor-pointer'>
+                                            <User2 />
+                                            <Button variant="link"> <Link to="/profile">View Profile</Link></Button>
+                                    </div>
+                                    )
+                                }
 
                     <div className="flex w-fit items-center gap-2 cursor-pointer">
                       <LogOut />
