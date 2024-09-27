@@ -6,7 +6,6 @@ import { setCompany } from "@/redux/companySlice";
 import { useDispatch } from "react-redux";
 import { toast } from "sonner";
 const useGetAllCompanies=()=>{
-    //console.log("CALLEd")
     const dispatch=useDispatch()
     
        // console.log("ISNSNSNS")
@@ -16,7 +15,7 @@ const useGetAllCompanies=()=>{
                 const res = await axios.get(`${COMPANY_API_END_POINT}/getCompany`,{
                     withCredentials:true
                 });
-                //console.log('called');
+                console.log('called');
                 if(res.data.success){
                     dispatch(setCompany(res.data.companies));
                     toast.success(res.data.message)

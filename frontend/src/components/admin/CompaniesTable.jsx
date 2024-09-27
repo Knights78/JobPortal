@@ -5,11 +5,50 @@ import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
 import { Edit2, MoreHorizontal } from 'lucide-react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import { DeleteIcon } from 'lucide-react'
+import { COMPANY_API_END_POINT } from '@/utils/constant'
+import axios from 'axios'
+import { toast } from 'sonner'
+import { setCompany } from '@/redux/companySlice'
 const CompaniesTable=()=>{
-    const obj=[1,2,3,4,5]
+    
     const dispatch=useDispatch()
     const navigate=useNavigate()
-    const {companys}=useSelector(store=>store.company)
+    const {companys,searchCompanyByText}=useSelector(store=>store.company)
+    //console.log("text",searchCompanyByText)
+    const [filterCompany,setFilterCompany]=useState(companys)
+    console.log(filterCompany)
+    useEffect(()=>{
+        const filteredCompany=companys.length >=0 && companys.filter((company)=>{
+            if(!searchCompanyByText)
+            {
+                return true;
+            }
+            return company?.name?.toLowerCase().includes(searchCompanyByText.toLowerCase());
+        })
+        //console.log("FILTERED",filteredCompany)
+        setFilterCompany(filteredCompany)
+
+    },[companys,searchCompanyByText])
+    const handleDelete=async(companyId)=>{
+        try {
+            const res=await axios.delete(`${COMPANY_API_END_POINT}/deleteCompany/${companyId}`,{
+                withCredentials:true
+            })
+            if(res.data.success)
+            {
+                dispatch(setCompany(res.data.companies))
+                toast.success(res.data.message)
+                
+            }
+
+
+        } catch (error) {
+            console.log(error)
+            toast.error(error.res.data.message)
+        }
+
+    }
     return (
         <div className='mt-12'>
         <Table>
@@ -24,11 +63,11 @@ const CompaniesTable=()=>{
             </TableHeader>
             <TableBody>
                 {
-                    companys?.map((company) => (
+                    filterCompany?.map((company) => (
                         <tr>
                             <TableCell>
                                 <Avatar>
-                                    <AvatarImage />
+                                    <AvatarImage src={company?.logo}/>
                                 </Avatar>
                             </TableCell>
                             <TableCell className='text-lg'>{company?.name}</TableCell>
@@ -41,6 +80,11 @@ const CompaniesTable=()=>{
                                             <Edit2 className='w-4' />
                                             <span>Edit</span>
                                         </div>
+                                        <div onClick={()=>handleDelete(company._id)} className='flex items-center gap-2 w-fit cursor-pointer'>
+                                            <DeleteIcon className='w-4' />
+                                            <span>Delete</span>
+                                        </div>
+
                                     </PopoverContent>
                                 </Popover>
                             </TableCell>

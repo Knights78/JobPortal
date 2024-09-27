@@ -1,4 +1,6 @@
 import { Company } from "../models/company.model.js";
+import getDataUri from "../utils/dataUri.js"
+import cloudinary from "../utils/cloudinary.js"
 export const companyRegister=async(req,res)=>{
     try {
         const { companyName } = req.body;
@@ -54,7 +56,6 @@ export const getCompany = async (req, res) => {
     }
 }
 
-
 export const getCompanyById = async (req, res) => {//for a particular company if we want to find
     try {
         const companyId = req.params.id;
@@ -77,8 +78,12 @@ export const updateCompany=async(req,res)=>
 {
     try {
         const {name,description,website,location}=req.body
-        const file=req.file
-        const updatedData={name,description,website,location};
+        const file = req.file;
+        // idhar cloudinary ayega
+        const fileUri = getDataUri(file);
+        const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
+        const logo = cloudResponse.secure_url;
+        const updatedData={name,description,website,location,logo};
         const companyId=req.params.id
         const company=await Company.findByIdAndUpdate(companyId,updatedData,{new:true})//new:true returns the updated document
         if (!company) {
@@ -103,24 +108,26 @@ export const updateCompany=async(req,res)=>
 }
 
 //if there are multiple companies registered by a single user then i can delete anyone of the company as well
-// export const deleteCompany=async(req,res)=>{
-//     try {
-//         const companyId=req.params.id
-//         const company=await Company.findByIdAndDelete(companyId)
-//         if(!company)
-//         {
-//             return res.json({
-//                 message:"error in removing the company",
-//                 success:false
-//             })
-//         }
-//         return res.json({
-//             message:"Company deleted succesfully",
-//             success:true
-//         })
+export const deleteCompany=async(req,res)=>{
+    try {
+        const companyId=req.params.id
+        const company=await Company.findByIdAndDelete(companyId,{new:true})
+        if(!company)
+        {
+            return res.json({
+                message:"error in removing the company",
+                success:false
+            })
+        }
+        const allCompanies = await Company.find();
+        return res.json({
+            companies:allCompanies,
+            message:"Company deleted succesfully",
+            success:true
+        })
 
 
-//     } catch (error) {
-//         console.log(error)
-//     }
-// }
+    } catch (error) {
+        console.log(error)
+    }
+}
