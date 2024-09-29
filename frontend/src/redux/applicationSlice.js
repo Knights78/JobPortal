@@ -3,8 +3,8 @@ const applicationSlice=createSlice({
     name:"application",
     initialState:{
         loading:false,
-        user:null
-
+        user:null,
+        applicants:[]
     },
     reducers:{
         setLoading:(state,action)=>{
@@ -12,10 +12,13 @@ const applicationSlice=createSlice({
         },
         setUser:(state,action)=>{
             state.user=action.payload
+        },
+        setApplicants:(state,action)=>{
+            state.applicants=action.payload
         }
 
     }
 })
 
-export const {setLoading,setUser}=applicationSlice.actions//applicationSlice will give all the actiosn in which we are removing the setLoading state
+export const {setLoading,setUser,setApplicants}=applicationSlice.actions//applicationSlice will give all the actiosn in which we are removing the setLoading state
 export default applicationSlice.reducer

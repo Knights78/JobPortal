@@ -24,6 +24,7 @@ const CompanySetup = () => {
     })
     const [loading, setLoading] = useState(false);
     const {singleCompany} = useSelector(store=>store.company);
+    //console.log(singleCompany)
     const changeEventHandler=(e)=>{
         setInput({...input,[e.target.name]:e.target.value})
     }
@@ -67,7 +68,7 @@ const CompanySetup = () => {
             description: singleCompany.description || "",
             website: singleCompany.website || "",
             location: singleCompany.location || "",
-            file: singleCompany.file || null
+            file: singleCompany.logo || null
         })
     },[singleCompany]);
   return (

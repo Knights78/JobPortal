@@ -87,16 +87,17 @@ export const getappliedJobs=async(req,res)=>{
 export const getApplicants=async(req,res)=>{
     try {
         const jobId=req.params.id
-        const applicants=await Job.find({_id:jobId}).populate({
-            path:'application',
-            options:{sort:{createdAt:-1}},
-            populate:{
-                path:'applicant'
-            }
-            
-        }) // we will get the applicants who have applied for this job
-
-        if(!applicants)
+        //console.log(jobId)
+        const job = await Job.findOne({ _id: jobId }) // Instead of find
+        .populate({
+          path: 'application',
+          options: { sort: { createdAt: -1 } },
+          populate: {
+            path: 'applicant',
+          },
+        }); // we will get the applicants who have applied for this job
+        //console.log(job.application.applicant)
+        if(!job)
         {
             return res.json({
                 message:"Job not found",
@@ -104,7 +105,7 @@ export const getApplicants=async(req,res)=>{
             })
         }
         return res.json({
-            applicants,
+            job,
             success:true
         })
 

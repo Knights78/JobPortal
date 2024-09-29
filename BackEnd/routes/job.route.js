@@ -8,4 +8,5 @@ jobRouter.get('/getAllJobs',isAuthenticated,getAllJobs)
 jobRouter.get('/getJobById/:id',isAuthenticated,getJobById)
 jobRouter.get('/getAdminJobs',isAuthenticated,getAdminJobs)
 
+
 export default jobRouter
