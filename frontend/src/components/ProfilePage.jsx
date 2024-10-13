@@ -10,12 +10,15 @@ import AppliedJobTable from "./AppliedJobTable";
 import UpdateProfileDialog from "./UpdateProfileDialog";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import useGetAppliedJobs from "@/hooks/useGetAllAppliedJobs";
 const ProfilePage = () => {
-  
+  console.log("calleddddd")
+  useGetAppliedJobs()
   const [open,setOpen]=useState(false)
   
   const haveResume=true
   const {user}=useSelector(store=>store.auth)
+  //console.log(user)
   const isGoogleLogin=user?.provider==='google'
   const navigate=useNavigate()
   

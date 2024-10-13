@@ -64,6 +64,7 @@ export const getappliedJobs=async(req,res)=>{
            }
 
         })
+        //console.log(application)
         //y;; get all the application which is been applied by this particular userId
         if(!application)
         {
@@ -108,9 +109,6 @@ export const getApplicants=async(req,res)=>{
             job,
             success:true
         })
-
-       
-
     } catch (error) {
         console.log(error)
     }

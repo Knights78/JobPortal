@@ -45,6 +45,8 @@ export const getAllJobs=async(req,res)=>{
             path:"company"
 
         }).sort({createdAt:-1})
+
+       // console.log("JOBS OF STUDENT",jobs)
         if (!jobs) {
             return res.status(404).json({
                 message: "Jobs not found.",
