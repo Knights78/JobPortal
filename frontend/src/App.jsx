@@ -1,5 +1,6 @@
 import React from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { ChakraProvider } from '@chakra-ui/react'
 import Signup from "./components/auth/Signup";
 import Login from "./components/auth/Login";
 import Home from "./Home";
@@ -16,6 +17,8 @@ import CompanySetup from "./components/admin/CompanySetup";
 import CompanieJobs from "./components/admin/CompanieJobs";
 import PostJob from "./components/admin/PostJob";
 import Applicants from "./components/admin/Applicants";
+import HomeResume from "./components/ResumeBuilder/HomeResume";
+import ResumeState from "./components/ResumeBuilder/Context/ResumeState.jsx";
 const appRouter = createBrowserRouter([
 
   {
@@ -81,13 +84,23 @@ const appRouter = createBrowserRouter([
     element:<ProtectedRoute><PostJob/></ProtectedRoute>
     
   },
+  //now the resume builder UI
+  {
+    path:'/HomeResume',
+    element:<HomeResume/>
+  }
   
 
 ]);
 const App = () => {
   return (
     <GoogleOAuthProvider clientId="110336232874-1vqqams19gtugdgcja15hqmoirnj5hu3.apps.googleusercontent.com">
-      <RouterProvider router={appRouter} />
+       <ChakraProvider>
+       <ResumeState>
+       <RouterProvider router={appRouter} />
+       </ResumeState>
+       
+       </ChakraProvider>
     </GoogleOAuthProvider>
   );
 };

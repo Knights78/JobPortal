@@ -1,0 +1,105 @@
+/* Theme3 Container */
+#theme3 {
+    padding: 47px 60px;
+  }
+  
+  .theme3-container {
+    background: #f8f9fa;
+  }
+  
+  /* Header Styling */
+  .name-heading {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #800000;
+    font-family: serif;
+  }
+  
+  .profile-text,
+  .contact-info p {
+    font-size: 1rem;
+    font-family: serif;
+  }
+  
+  .border-divider {
+    border-top: 1px solid #ccc;
+  }
+  
+  /* Section Styling */
+  .sections {
+    padding: 20px;
+  }
+  
+  .section-item {
+    display: flex;
+    margin-top: 20px;
+  }
+  
+  .section-title {
+    min-width: 175px;
+    font-size: 1.25rem;
+    font-weight: 600;
+    font-family: serif;
+  }
+  
+  .section-content {
+    margin-left: 25px;
+    width: 100%;
+  }
+  
+  .sub-heading {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  
+  .sub-details {
+    padding-left: 20px;
+  }
+  
+  /* Skill and Achievement Styling */
+  .skill-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  
+  .skill-item {
+    display: flex;
+    align-items: center;
+  }
+  
+  .bullet-point {
+    background: black;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    margin-right: 8px;
+  }
+  
+  .skill-text {
+    font-size: 0.9rem;
+    color: #333;
+  }
+  
+  /* Media Queries */
+  @media only screen and (max-width: 715px) {
+    #theme3 {
+      padding: 47px 19px;
+    }
+  
+    .info-text {
+      width: 290px;
+    }
+  
+    .summary-text {
+      width: 100% !important;
+    }
+  }
+  
+  @media only screen and (max-width: 430px) {
+    #theme3 {
+      padding: 14px 10px;
+    }
+  }
+  

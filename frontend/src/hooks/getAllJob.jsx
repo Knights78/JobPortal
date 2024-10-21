@@ -13,8 +13,10 @@ const getAllJob = () => {
                 const res=await axios.get(`${JOB_API_END_POINT}/getAllJobs`,{
                     withCredentials:true
                 })
+                //console.log(res)
                 if(res.data.success)
                 {
+                    console.log("Inside job")
                     dispatch(setAllJob(res.data.jobs))
                 }
 

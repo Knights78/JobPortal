@@ -17,7 +17,7 @@ const ApplicantsTable = () => {
         try {
             axios.defaults.withCredentials = true;
             const res = await axios.post(`${APPLICATION_API_END_POINT}/updateStatus/${id}`, { status });
-            console.log(res);
+           // console.log(res);
             if (res.data.success) {
                 toast.success(res.data.message);
             }
@@ -28,14 +28,14 @@ const ApplicantsTable = () => {
   return (
     <div>
     <Table>
-        <TableCaption>A list of your recent applied user</TableCaption>
+        <TableCaption className='text-lg'>A list of your recent applied user</TableCaption>
         <TableHeader>
             <TableRow>
-                <TableHead>FullName</TableHead>
-                <TableHead>Email</TableHead>
-                <TableHead>Contact</TableHead>
-                <TableHead>Resume</TableHead>
-                <TableHead>Date</TableHead>
+                <TableHead className='text-lg'>FullName</TableHead>
+                <TableHead className='text-lg'>Email</TableHead>
+                <TableHead className='text-lg'>Contact</TableHead>
+                <TableHead className='text-lg'>Resume</TableHead>
+                <TableHead className='text-lg'>Date</TableHead>
                 <TableHead className="text-right">Action</TableHead>
             </TableRow>
         </TableHeader>
@@ -43,15 +43,15 @@ const ApplicantsTable = () => {
             {
                 applicants && applicants?.application?.map((item) => (
                     <tr key={item._id}>
-                        <TableCell>{item?.applicant?.fullname}</TableCell>
-                        <TableCell>{item?.applicant?.email}</TableCell>
-                        <TableCell>{item?.applicant?.phoneNumber}</TableCell>
+                        <TableCell className='text-lg'>{item?.applicant?.fullname}</TableCell>
+                        <TableCell className='text-lg'>{item?.applicant?.email}</TableCell>
+                        <TableCell className='text-lg'>{item?.applicant?.phoneNumber}</TableCell>
                         <TableCell >
                             {
                                 item.applicant?.profile?.resume ? <a className="text-blue-600 cursor-pointer" href={item?.applicant?.profile?.resume} target="_blank" rel="noopener noreferrer">{item?.applicant?.profile?.resumeOriginalName}</a> : <span>NA</span>
                             }
                         </TableCell>
-                        <TableCell>{item?.applicant.createdAt.split("T")[0]}</TableCell>
+                        <TableCell className='text-lg'>{item?.applicant.createdAt.split("T")[0]}</TableCell>
                         <TableCell className="float-right cursor-pointer">
                             <Popover>
                                 <PopoverTrigger>

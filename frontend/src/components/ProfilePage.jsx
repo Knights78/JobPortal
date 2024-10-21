@@ -29,12 +29,12 @@ const ProfilePage = () => {
       <div className="max-w-7xl mx-auto bg-white border border-gray-400 rounded-2xl my-5 p-8 mt-12">
         <div className="flex justify-between">
           <div className="flex items-center gap-5">
-            <Avatar className="h-24 2-24">
+            <Avatar className="h-30 w-24">
               <AvatarImage src="https://www.shutterstock.com/image-vector/circle-line-simple-design-logo-600nw-2174926871.jpg" className="h-20 w-20"></AvatarImage>
             </Avatar>
             <div>
-              <h1 className="text-xl font-bold">{user?.fullname}</h1>
-              <p>
+              <h1 className="text-3xl font-bold">{user?.fullname}</h1>
+              <p className="text-lg">
               {user?.profile?.bio}
               </p>
             </div>
@@ -48,18 +48,18 @@ const ProfilePage = () => {
         <div className="my-5 flex flex-col gap-5">
           <div className="flex items-center gap-5">
             <Mail />
-            <span>{user?.email}</span>
+            <span className="text-xl">{user?.email}</span>
           </div>
           <div className="flex items-center gap-5">
             <Phone />
-            <span>{user?.phoneNumber}</span>
+            <span className="text-xl">{user?.phoneNumber}</span>
           </div>
         </div>
         <div>
-          <h1 className="font-bold text-lg">skills</h1>
+          <h1 className="font-bold text-2xl">skills</h1>
             <div  className='flex items-center  gap-2'>
             {
-                user?.profile?.skills.length !== 0 ? user?.profile?.skills.map((item, index) => <Badge key={index}>{item}</Badge>) : <span>NA</span>
+                user?.profile?.skills.length !== 0 ? user?.profile?.skills.map((item, index) => <Badge className='text-lg' key={index}>{item}</Badge>) : <span>NA</span>
             }
             </div>
         </div>
@@ -72,7 +72,7 @@ const ProfilePage = () => {
 
       </div> 
       <div className='w-[100%] pl-40 ml-[300px] bg-white rounded-2xl mt-10'>
-                <h1 className='font-bold text-lg my-5'>Applied Jobs</h1>
+                <h1 className='font-bold text-2xl my-5'>Applied Jobs</h1>
                 {/* Applied Job Table   */}
                 <AppliedJobTable />
        </div>

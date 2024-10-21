@@ -93,9 +93,9 @@ const UpdateProfileDialog = ({ open, setOpen, user,isGoogleLogin}) => {
 
   return (
     <div>
-      <Dialog open={open}>
+      <Dialog open={open} className='max-w-8xl max-h-8xl'>
         <DialogContent
-          className="sm:max-w-[425px]"
+          className="max-w-3xl max-h-9xl"
           onInteractOutside={() => setOpen(false)}
         >
           <DialogHeader>
@@ -104,7 +104,7 @@ const UpdateProfileDialog = ({ open, setOpen, user,isGoogleLogin}) => {
           <form onSubmit={handleSubmit}>
             <div className="grid gap-4 py-4">
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="name" className="text-right">
+                <Label htmlFor="name" className="text-right text-lg">
                   Name
                 </Label>
                 <Input
@@ -113,11 +113,11 @@ const UpdateProfileDialog = ({ open, setOpen, user,isGoogleLogin}) => {
                   type="text"
                   value={input.fullname}
                   onChange={changeEventHandler}
-                  className="col-span-3"
+                  className="col-span-3 text-lg"
                 />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="email" className="text-right">
+                <Label htmlFor="email" className="text-right text-lg">
                   Email
                 </Label>
                 <Input
@@ -126,11 +126,11 @@ const UpdateProfileDialog = ({ open, setOpen, user,isGoogleLogin}) => {
                   type="email"
                   value={input.email}
                   onChange={changeEventHandler}
-                  className="col-span-3"
+                  className="col-span-3 text-lg"
                 />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="number" className="text-right">
+                <Label htmlFor="number" className="text-right text-lg">
                   Number
                 </Label>
                 <Input
@@ -138,11 +138,11 @@ const UpdateProfileDialog = ({ open, setOpen, user,isGoogleLogin}) => {
                   name="phoneNumber"
                   value={input.phoneNumber}
                   onChange={changeEventHandler}
-                  className="col-span-3"
+                  className="col-span-3 text-lg"
                 />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="bio" className="text-right">
+                <Label htmlFor="bio" className="text-right text-lg">
                   Bio
                 </Label>
                 <Input
@@ -150,11 +150,11 @@ const UpdateProfileDialog = ({ open, setOpen, user,isGoogleLogin}) => {
                   name="bio"
                   value={input.bio}
                   onChange={changeEventHandler}
-                  className="col-span-3"
+                  className="col-span-3 text-lg"
                 />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="skills" className="text-right">
+                <Label htmlFor="skills" className="text-right text-lg">
                   Skills
                 </Label>
                 <Input
@@ -162,13 +162,13 @@ const UpdateProfileDialog = ({ open, setOpen, user,isGoogleLogin}) => {
                   name="skills"
                   value={input.skills}
                   onChange={changeEventHandler}
-                  className="col-span-3"
+                  className="col-span-3 text-lg"
                 />
               </div>
               <div>
               {
                   input.file && (
-                    <div>
+                    <div className="ml-20 mr-20 text-lg">
                       <Label>Existing Resume</Label>
                       <a target='blank' href={user?.profile?.resume}>Click here</a>
                     </div>
@@ -176,7 +176,7 @@ const UpdateProfileDialog = ({ open, setOpen, user,isGoogleLogin}) => {
                 }
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="file" className="text-right">
+                <Label htmlFor="file" className="text-right text-lg">
                   Resume
                 </Label>
                 <Input
@@ -184,7 +184,7 @@ const UpdateProfileDialog = ({ open, setOpen, user,isGoogleLogin}) => {
                   name="file"
                   type="file"
                   accept="application/pdf"
-                  className="col-span-3"
+                  className="col-span-3 text-lg"
                   onChange={fileChangeHandler}
                 />
               </div>

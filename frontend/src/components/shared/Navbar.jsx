@@ -10,6 +10,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { gapi } from "gapi-script";
 import { useEffect } from "react";
 import { setUser } from "@/redux/authSlice";
+
 const Navbar = () => {
   const { user } = useSelector((store) => store.auth);
   const navigate = useNavigate();
@@ -70,12 +71,12 @@ const Navbar = () => {
     <div className="bg-white">
       <div className="flex items-center justify-between mx-auto max-w-7xl h-16">
         <div>
-          <h1 className="text-4xl font-bold">
+          <h1 className="text-5xl font-bold">
             Job<span className="text-[#F83002]">Portal</span>
           </h1>
         </div>
         <div className="flex items-center gap-12">
-          <ul className="flex text-xl items-center gap-5">
+          <ul className="flex text-2xl items-center gap-5">
             {user && user.role === "recruiter" ? (
               <>
                 <li>
@@ -121,6 +122,7 @@ const Navbar = () => {
                     Browse
                   </Link>
                 </li>
+               
               </>
             )}
           </ul>
@@ -188,7 +190,9 @@ const Navbar = () => {
                                     <div className='flex w-fit items-center gap-2 cursor-pointer'>
                                             <User2 />
                                             <Button variant="link"> <Link to="/profile">View Profile</Link></Button>
+          
                                     </div>
+                                      
                                     )
                                 }
 

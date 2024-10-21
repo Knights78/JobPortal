@@ -103,61 +103,63 @@ const Login = () => {
             <Navbar />
             <div className='flex items-center justify-center max-w-7xl mx-auto'>
                 <form onSubmit={handleSubmit} className='w-1/2 border border-gray-200 rounded-md p-4 my-10'>
-                    <h1 className='font-bold text-xl mb-5'>Login</h1>
+                    <h1 className='font-bold text-2xl mb-5 '>Login</h1>
                     <div className='my-2'>
-                        <Label>Email</Label>
+                        <Label className='text-lg'>Email</Label>
                         <Input
                             type="email"
                             value={input.email}
                             name="email"
+                            className='text-lg'
                             onChange={handleonChange}
                             placeholder="xyz@gmail.com"
                         />
                     </div>
 
                     <div className='my-2'>
-                        <Label>Password</Label>
+                        <Label className='text-lg'>Password</Label>
                         <Input
                             type="password"
                             value={input.password}
                             name="password"
+                            className='text-lg'
                             onChange={handleonChange}
                             placeholder="********"
                         />
                     </div>
                     <div className='flex items-center justify-between'>
                         <RadioGroup className="flex items-center gap-4 my-5">
-                            <div className="flex items-center space-x-2">
+                            <div className="flex items-center space-x-2 text-lg">
                                 <Input
                                     type="radio"
                                     name="role"
                                     value="student"
                                     checked={input.role === 'student'}
                                     onChange={handleonChange}
-                                    className="cursor-pointer"
+                                    className="cursor-pointer text-lg"
                                 />
                                 <Label htmlFor="r1">Student</Label>
                             </div>
-                            <div className="flex items-center space-x-2">
+                            <div className="flex items-center space-x-2 text-lg">
                                 <Input
                                     type="radio"
                                     name="role"
                                     value="recruiter"
                                     checked={input.role === 'recruiter'}
                                     onChange={handleonChange}
-                                    className="cursor-pointer"
+                                    className="cursor-pointer text-lg"
                                 />
                                 <Label htmlFor="r2">Recruiter</Label>
                             </div>
                         </RadioGroup>
                     </div>
                     {
-                        loading ? <button className="w-full my-4"> <Loader2 className='mr-2 h-4 w-4 animate-spin' /> Please wait </button> : <button type="submit" className="w-full my-4">Login</button>
+                        loading ? <button className="w-full my-4"> <Loader2 className='mr-2 h-4 w-4 animate-spin' /> Please wait </button> : <button type="submit" className="w-full my-4 text-lg bg-gray-800 text-white rounded-md">Login</button>
                     }
                     <div>
-                        <button className='w-full my-4' onClick={handleGoogleLogin}>Login with google  <FaGoogle/> </button>
+                        <button className='w-full my-4 flex items-center ml-20 pl-40 text-lg' onClick={handleGoogleLogin}>Login with google  <span className='ml-4'>< FaGoogle/></span> </button>
                     </div>
-                    <span className='text-sm'>Don't have an account? <Link to="/signup" className='text-blue-600'>Signup</Link></span>
+                    <span className='text-md mt-10'>Don't have an account? <Link to="/signup" className='text-blue-600 text-md'>Signup</Link></span>
                 </form>
             </div>
         </div>

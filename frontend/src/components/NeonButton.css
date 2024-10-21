@@ -1,0 +1,67 @@
+:root {
+    --clr-neon: hsl(280, 100%, 70%); /* Purpleish color */
+    --clr-bg: #000; /* Background color for contrast */
+}
+
+.neon-button {
+    font-size: 2rem; /* Adjust font size to fit the smaller button */
+    color: var(--clr-neon);
+    display: inline-block;
+    cursor: pointer;
+    text-decoration: none;
+    border: var(--clr-neon) .125em solid;
+    padding: 0.5em; /* Smaller padding to make the button more compact */
+    width: 5px; /* Set a fixed width */
+    height: 50px; /* Set a fixed height */
+    border-radius: 50%; /* Make the button circular */
+    text-align: center;
+    line-height: 2.5em; /* Center the text vertically */
+    text-shadow: 
+      0 0 0.125em hsl(0 0% 100% / 0.3),
+      0 0 0.45em currentColor;
+    box-shadow:
+      inset 0 0 0.5em 0 var(--clr-neon),
+      0 0 0.5em 0 var(--clr-neon);
+    position: relative;
+}
+
+.neon-button::before {
+    pointer-events: none;
+    content: '';
+    position: absolute;
+    background: var(--clr-neon);
+    top: 120%;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform: perspective(1em) rotateX(40deg) scale(1, 0.35);
+    filter: blur(1em);
+    opacity: 0.7;
+}
+
+.neon-button:hover, .neon-button:focus {
+    color: var(--clr-bg);
+    text-shadow: none;
+}
+
+.neon-button::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    box-shadow: 0 0 2em 0.5em var(--clr-neon);
+    background-color: var(--clr-neon);
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 100ms linear;
+}
+
+.neon-button:hover::before, .neon-button:focus::before {
+    opacity: 1;
+}
+
+.neon-button:hover::after, .neon-button:focus::after {
+    opacity: 1;
+}

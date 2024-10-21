@@ -55,10 +55,10 @@ const CompaniesTable=()=>{
             <TableCaption className='text-xl'>A list of your recent registered companies</TableCaption>
             <TableHeader>
                 <TableRow>
-                    <TableHead  className='text-xl'>Logo</TableHead>
-                    <TableHead className='text-xl'>Name</TableHead>
-                    <TableHead className='text-xl'>Date</TableHead>
-                    <TableHead className="text-xl">Action</TableHead>
+                    <TableHead  className='text-2xl'>Logo</TableHead>
+                    <TableHead className='text-2xl'>Name</TableHead>
+                    <TableHead className='text-2xl'>Date</TableHead>
+                    <TableHead className="text-2xl">Action</TableHead>
                 </TableRow>
             </TableHeader>
             <TableBody>
@@ -67,21 +67,21 @@ const CompaniesTable=()=>{
                         <tr>
                             <TableCell>
                                 <Avatar>
-                                    <AvatarImage src={company?.logo}/>
+                                    <AvatarImage  src={company?.logo}/>
                                 </Avatar>
                             </TableCell>
-                            <TableCell className='text-lg'>{company?.name}</TableCell>
-                            <TableCell className='text-lg'>{company?.createdAt.split("T")[0]}</TableCell>
-                            <TableCell className="text-right cursor-pointer">
+                            <TableCell className='text-xl'>{company?.name}</TableCell>
+                            <TableCell className='text-xl'>{company?.createdAt.split("T")[0]}</TableCell>
+                            <TableCell className=" cursor-pointer">
                                 <Popover>
-                                    <PopoverTrigger><MoreHorizontal /></PopoverTrigger>
-                                    <PopoverContent className="w-32">
+                                    <PopoverTrigger>< MoreHorizontal className='ml-8' /></PopoverTrigger>
+                                    <PopoverContent className="w-32 flex justify-center gap-3 flex-col">
                                         <div onClick={()=> navigate(`/admin/companies/${company._id}`)} className='flex items-center gap-2 w-fit cursor-pointer'>
-                                            <Edit2 className='w-4' />
-                                            <span>Edit</span>
+                                            <Edit2 className='w-5' />
+                                            <span >Edit</span>
                                         </div>
                                         <div onClick={()=>handleDelete(company._id)} className='flex items-center gap-2 w-fit cursor-pointer'>
-                                            <DeleteIcon className='w-4' />
+                                            <DeleteIcon className='w-5' />
                                             <span>Delete</span>
                                         </div>
 

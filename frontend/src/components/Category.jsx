@@ -34,7 +34,7 @@ const Category = () => {
             {
                 category.map((cat, index) => (
                     <CarouselItem className="md:basis-1/2 lg-basis-1/3 pl-4">
-                        <Button  variant="outline" className="rounded-full text-lg px-6 py-3">{cat}</Button>
+                        <Button  variant="outline" className="rounded-full text-xl px-6 py-3">{cat}</Button>
                     </CarouselItem>
                 ))
             }

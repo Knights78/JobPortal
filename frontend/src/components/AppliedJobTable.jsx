@@ -26,10 +26,10 @@ const AppliedJobTable = () => {
         <TableCaption className='text-2xl'>A list of your applied jobs</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead className='text-lg'>Date</TableHead>
-            <TableHead className='text-lg'>Job Role</TableHead>
-            <TableHead className='text-lg'>Company</TableHead>
-            <TableHead className="text-right text-lg">Status</TableHead>
+            <TableHead className='text-xl'>Date</TableHead>
+            <TableHead className='text-xl'>Job Role</TableHead>
+            <TableHead className='text-xl'>Company</TableHead>
+            <TableHead className="text-right text-xl">Status</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -37,10 +37,10 @@ const AppliedJobTable = () => {
             allAppliedJobs.length <= 0 ? <span>You haven't applied for any job yet.</span> :
               allAppliedJobs.map((appliedJob) => (
                 <TableRow key={appliedJob.id}>
-                  <TableCell className='text-xl'>{appliedJob?.createdAt?.split("T")[0]}</TableCell>
-                  <TableCell className='text-xl'>{appliedJob.job?.title}</TableCell>
-                  <TableCell className='text-xl'>{appliedJob.job?.company?.name}</TableCell>
-                  <TableCell className="text-right text-xl">
+                  <TableCell className='text-2xl'>{appliedJob?.createdAt?.split("T")[0]}</TableCell>
+                  <TableCell className='text-2xl'>{appliedJob.job?.title}</TableCell>
+                  <TableCell className='text-2xl'>{appliedJob.job?.company?.name}</TableCell>
+                  <TableCell className="text-right text-2xl">
                     <Badge className={getBadgeColor(appliedJob.status)}>{appliedJob.status.toUpperCase()}</Badge>
                   </TableCell>
                 </TableRow>

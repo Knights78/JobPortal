@@ -1,0 +1,81 @@
+#theme2 {
+    padding: 47px 60px;
+  }
+  
+  #resume-avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: 50% 25%;
+  }
+  
+  .info-text {
+    margin-bottom: 30px;
+  }
+  
+  .profile-text {
+    font-size: 1.25rem;
+    font-weight: 500;
+  }
+  
+  .summary-text {
+    font-size: 1rem;
+    width: 400px;
+  }
+  
+  .section-heading {
+    font-size: 1.75rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
+  
+  .sub-heading {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0.5rem 0;
+  }
+  
+  .sub-text {
+    font-size: 0.875rem;
+  }
+  
+  .skill-badge {
+    background-color: #D2E4E1;
+    color: black;
+    margin: 5px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    display: inline-block;
+  }
+  
+  .sub-details {
+    padding-left: 20px;
+  }
+  
+  /* Media Queries */
+  @media only screen and (max-width: 715px) {
+    #theme2 {
+      padding: 47px 19px;
+    }
+  
+    #resume-avatar {
+      width: auto;
+      height: 105px;
+    }
+  
+    .info-text {
+      width: 290px;
+    }
+  
+    .summary-text {
+      width: 100% !important;
+    }
+  }
+  
+  @media only screen and (max-width: 430px) {
+    #theme2 {
+      padding: 14px 10px;
+    }
+  }
+  

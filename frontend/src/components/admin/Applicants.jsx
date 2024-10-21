@@ -19,7 +19,7 @@ const Applicants = () => {
         const res = await axios.get(`${APPLICATION_API_END_POINT}/getApplicants/${params.id}`, {
           withCredentials: true,
         });
-        console.log('INSIDE', res.data.job.application);
+       // console.log('INSIDE', res.data.job.application);
 
         // Assuming `job` is an array with one job, and `application` is an array inside that job
         if (res.data.job && res.data.job.application.length > 0) {

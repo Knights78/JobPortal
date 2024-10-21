@@ -24,22 +24,22 @@ const AdminJobsTable = () => {
   return (
     <div>
     <Table>
-        <TableCaption>A list of your recent  posted jobs</TableCaption>
+        <TableCaption className='text-xl'>A list of your recent  posted jobs</TableCaption>
         <TableHeader>
             <TableRow>
-                <TableHead>Company Name</TableHead>
-                <TableHead>Role</TableHead>
-                <TableHead>Date</TableHead>
-                <TableHead className="text-right">Action</TableHead>
+                <TableHead className='text-lg'>Company Name</TableHead>
+                <TableHead className='text-lg'>Role</TableHead>
+                <TableHead className='text-lg'>Date</TableHead>
+                <TableHead className="text-right text-lg">Action</TableHead>
             </TableRow>
         </TableHeader>
         <TableBody>
             {
                 filterJobs?.map((job) => (
                     <tr>
-                        <TableCell>{job?.company?.name}</TableCell>
-                        <TableCell>{job?.title}</TableCell>
-                        <TableCell>{job?.createdAt.split("T")[0]}</TableCell>
+                        <TableCell className='text-xl'>{job?.company?.name}</TableCell>
+                        <TableCell className='text-xl'>{job?.title}</TableCell>
+                        <TableCell className='text-xl'>{job?.createdAt.split("T")[0]}</TableCell>
                         <TableCell className="text-right cursor-pointer">
                             <Popover>
                                 <PopoverTrigger><MoreHorizontal /></PopoverTrigger>
